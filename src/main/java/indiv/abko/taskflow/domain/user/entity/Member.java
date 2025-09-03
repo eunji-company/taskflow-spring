@@ -43,4 +43,8 @@ public class Member extends BaseTimeEntity {
 	private UserRole userRole;
 
 	private LocalDateTime deletedAt;
+
+	public static Member of(String username, String password, String email, String name, UserRole userRole) {
+		return new Member(null, username, password, email, name, userRole, null);
+	}
 }
