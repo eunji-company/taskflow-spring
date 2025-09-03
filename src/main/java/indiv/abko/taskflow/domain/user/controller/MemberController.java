@@ -1,7 +1,5 @@
 package indiv.abko.taskflow.domain.user.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,10 +18,8 @@ public class MemberController {
 	private final ViewMemberInfoUseCase viewMemberInfoUseCase;
 
 	@GetMapping("/me")
-	public ResponseEntity<CommonResponse<MemberInfoResponse>> getMemberInfo(
+	public CommonResponse<MemberInfoResponse> getMemberInfo(
 		@AuthenticationPrincipal AuthMember authMember) {
-		return new ResponseEntity<>(
-			CommonResponse.success("사용자 정보를 조회했습니다.", viewMemberInfoUseCase.execute(authMember.memberId())),
-			HttpStatus.OK);
+		return CommonResponse.success("사용자 정보를 조회했습니다.", viewMemberInfoUseCase.execute(authMember.memberId()));
 	}
 }

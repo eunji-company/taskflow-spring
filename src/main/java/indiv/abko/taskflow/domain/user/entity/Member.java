@@ -44,17 +44,7 @@ public class Member extends BaseTimeEntity {
 
 	private LocalDateTime deletedAt;
 
-	public static Member createForTest(String username,
-		String password,
-		String email,
-		String name,
-		UserRole role) {
-		Member member = new Member();
-		member.username = username;
-		member.password = password;
-		member.email = email;
-		member.name = name;
-		member.userRole = role;
-		return member;
+	public static Member of(String username, String password, String email, String name, UserRole userRole) {
+		return new Member(null, username, password, email, name, userRole, null);
 	}
 }

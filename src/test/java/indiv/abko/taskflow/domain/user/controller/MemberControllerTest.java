@@ -39,9 +39,11 @@ public class MemberControllerTest {
 	public void getMemberInfo_성공() throws Exception {
 		//given
 		Long memberId = 1L;
-		Member member = Member.createForTest("testusername", "HASHED_PW", "test@example.com", "testname",
+		Member member = Member.of("testusername", "HASHED_PW", "test@example.com", "testname",
 			UserRole.USER);
-		var dto = new MemberInfoResponse(member);
+
+		var dto = MemberInfoResponse.from(member.getId(), member.getUsername(), member.getEmail(), member.getName(),
+			member.getUserRole().name(), member.getCreatedAt());
 
 		given(viewMemberInfoUseCase.execute(memberId)).willReturn(dto);
 
