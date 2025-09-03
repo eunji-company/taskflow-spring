@@ -48,4 +48,15 @@ public class Comment {
 
 	@ManyToOne
 	private Comment parentComment;
+
+	public static Comment of(Member member, Task task, String content) {
+		return new Comment(
+			null,
+			content,
+			null,
+			member,
+			task,
+			null
+		);
+	}
 }
