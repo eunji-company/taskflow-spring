@@ -1,7 +1,7 @@
 ---
-name: 작업
-about: 작업
-title: 작업
+name: 작업 작업
+about: 작업 작업
+title: 작업 작업
 labels: "✨ feat"
 assignees: ''
 ---
