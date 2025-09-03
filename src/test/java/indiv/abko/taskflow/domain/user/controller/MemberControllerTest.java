@@ -42,7 +42,7 @@ public class MemberControllerTest {
 		Member member = Member.of("testusername", "HASHED_PW", "test@example.com", "testname",
 			UserRole.USER);
 
-		var dto = MemberInfoResponse.from(member.getId(), member.getUsername(), member.getEmail(), member.getName(),
+		var dto = new MemberInfoResponse(member.getId(), member.getUsername(), member.getEmail(), member.getName(),
 			member.getUserRole().name(), member.getCreatedAt());
 
 		given(viewMemberInfoUseCase.execute(memberId)).willReturn(dto);

@@ -19,7 +19,7 @@ public class ViewMemberInfoUseCase {
 	public MemberInfoResponse execute(Long memberId) {
 		Member member = memberRepository.findById(memberId)
 			.orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
-		return MemberInfoResponse.from(member.getId(), member.getUsername(), member.getEmail(), member.getName(),
+		return new MemberInfoResponse(member.getId(), member.getUsername(), member.getEmail(), member.getName(),
 			member.getUserRole().name(), member.getCreatedAt());
 	}
 }
