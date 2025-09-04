@@ -18,6 +18,7 @@ import indiv.abko.taskflow.domain.user.dto.MemberInfoResponse;
 import indiv.abko.taskflow.domain.user.dto.MembersInfoResponse;
 import indiv.abko.taskflow.domain.user.entity.Member;
 import indiv.abko.taskflow.domain.user.entity.UserRole;
+import indiv.abko.taskflow.domain.user.service.ViewAvailableMembersInfoUseCase;
 import indiv.abko.taskflow.domain.user.service.ViewMemberInfoUseCase;
 import indiv.abko.taskflow.domain.user.service.ViewMembersInfoUseCase;
 import indiv.abko.taskflow.global.auth.WithMockAuthMember;
@@ -32,6 +33,9 @@ public class MemberControllerTest {
 
 	@MockitoBean
 	ViewMembersInfoUseCase viewMembersInfoUseCase;
+
+	@MockitoBean
+	ViewAvailableMembersInfoUseCase viewAvailableMembersInfoUseCase;
 
 	@Test
 	@WithMockAuthMember(memberId = 1L, userRole = UserRole.USER)
