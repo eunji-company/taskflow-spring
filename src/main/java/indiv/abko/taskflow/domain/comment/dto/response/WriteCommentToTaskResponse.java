@@ -4,6 +4,8 @@ import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import indiv.abko.taskflow.global.dto.DtoConstants;
+
 public record WriteCommentToTaskResponse(
 	long id,
 	String content,
@@ -11,17 +13,15 @@ public record WriteCommentToTaskResponse(
 	long userId,
 	UserResp user,
 	Long parentId,
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DtoConstants.TIME_FORMAT, timezone = DtoConstants.DISPLAY_TIME_ZONE_STRING)
 	Instant createdAt,
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
-	Instant updatedAt
-) {
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DtoConstants.TIME_FORMAT, timezone = DtoConstants.DISPLAY_TIME_ZONE_STRING)
+	Instant updatedAt) {
 	public record UserResp(
 		long id,
 		String username,
 		String name,
 		String email,
-		String role
-	) {
+		String role) {
 	}
 }
