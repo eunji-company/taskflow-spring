@@ -4,10 +4,13 @@ import java.time.ZoneOffset;
 
 import org.springframework.stereotype.Component;
 
+import indiv.abko.taskflow.domain.comment.dto.command.WriteCommentToTaskCommand;
+import indiv.abko.taskflow.domain.comment.dto.request.WriteCommentRequest;
 import indiv.abko.taskflow.domain.comment.dto.response.WriteCommentToTaskResponse;
 import indiv.abko.taskflow.domain.comment.entity.Comment;
 import indiv.abko.taskflow.domain.task.entity.Task;
 import indiv.abko.taskflow.domain.user.entity.Member;
+import indiv.abko.taskflow.global.auth.AuthMember;
 
 @Component
 public class CommentMapper {
@@ -29,5 +32,10 @@ public class CommentMapper {
 			savedComment.getCreatedAt().toInstant(ZoneOffset.UTC),
 			savedComment.getCreatedAt().toInstant(ZoneOffset.UTC)
 		);
+	}
+
+	public WriteCommentToTaskCommand toWriteCommentToTaskCommand(AuthMember authMember, long taskId,
+		WriteCommentRequest request) {
+		return new WriteCommentToTaskCommand(authMember.memberId(), taskId, request.content());
 	}
 }

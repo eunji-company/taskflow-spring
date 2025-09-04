@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import indiv.abko.taskflow.domain.comment.dto.command.WriteCommentToTaskCommand;
 import indiv.abko.taskflow.domain.comment.dto.request.WriteCommentRequest;
 import indiv.abko.taskflow.domain.comment.dto.response.WriteCommentToTaskResponse;
+import indiv.abko.taskflow.domain.comment.mapper.CommentMapper;
 import indiv.abko.taskflow.domain.comment.service.WriteCommentToTaskUseCase;
 import indiv.abko.taskflow.global.auth.AuthMember;
 import indiv.abko.taskflow.global.dto.CommonResponse;
@@ -23,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api")
 public class CommentController {
 	private final WriteCommentToTaskUseCase writeCommentToTaskUseCase;
+	private final CommentMapper commentMapper;
 
 	@PostMapping("/tasks/{taskId}/comments")
 	@ResponseStatus(HttpStatus.CREATED)
@@ -30,8 +32,7 @@ public class CommentController {
 		@PathVariable("taskId") long taskId,
 		@Valid @RequestBody WriteCommentRequest request) {
 		if (request.parentId() == null) {
-			WriteCommentToTaskCommand command = new WriteCommentToTaskCommand(authMember.memberId(), taskId,
-				request.content());
+			WriteCommentToTaskCommand command = commentMapper.toWriteCommentToTaskCommand(authMember, taskId, request);
 			WriteCommentToTaskResponse result = writeCommentToTaskUseCase.execute(command);
 			return CommonResponse.success("댓글이 생성되었습니다.", result);
 		} else {
