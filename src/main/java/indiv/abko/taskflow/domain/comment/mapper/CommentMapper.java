@@ -23,9 +23,9 @@ public class CommentMapper {
 				member.getUsername(),
 				member.getName(),
 				member.getEmail(),
-				member.getUserRole().toString()
+				member.getUserRole().getKey()
 			),
-			savedComment.getParentComment().getId(),
+			null,
 			savedComment.getCreatedAt().toInstant(ZoneOffset.UTC),
 			savedComment.getCreatedAt().toInstant(ZoneOffset.UTC)
 		);
