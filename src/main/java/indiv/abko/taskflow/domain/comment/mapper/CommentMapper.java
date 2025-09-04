@@ -4,6 +4,7 @@ import java.time.ZoneOffset;
 
 import org.springframework.stereotype.Component;
 
+import indiv.abko.taskflow.domain.comment.dto.command.DeleteMyCommentCommand;
 import indiv.abko.taskflow.domain.comment.dto.command.WriteCommentToTaskCommand;
 import indiv.abko.taskflow.domain.comment.dto.request.WriteCommentRequest;
 import indiv.abko.taskflow.domain.comment.dto.response.WriteCommentToTaskResponse;
@@ -26,16 +27,18 @@ public class CommentMapper {
 				member.getUsername(),
 				member.getName(),
 				member.getEmail(),
-				member.getUserRole().getKey()
-			),
+				member.getUserRole().getKey()),
 			null,
 			savedComment.getCreatedAt().toInstant(ZoneOffset.UTC),
-			savedComment.getCreatedAt().toInstant(ZoneOffset.UTC)
-		);
+			savedComment.getCreatedAt().toInstant(ZoneOffset.UTC));
 	}
 
 	public WriteCommentToTaskCommand toWriteCommentToTaskCommand(AuthMember authMember, long taskId,
 		WriteCommentRequest request) {
 		return new WriteCommentToTaskCommand(authMember.memberId(), taskId, request.content());
+	}
+
+	public DeleteMyCommentCommand toDeleteMyCommentCommand(AuthMember member, long commentId) {
+		return new DeleteMyCommentCommand(member.memberId(), commentId);
 	}
 }
