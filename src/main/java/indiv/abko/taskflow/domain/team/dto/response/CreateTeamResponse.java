@@ -2,7 +2,7 @@ package indiv.abko.taskflow.domain.team.dto.response;
 
 import java.time.LocalDateTime;
 
-public record TeamCreateResponse(
+public record CreateTeamResponse(
 	Long id,
 	String name,
 	String description,

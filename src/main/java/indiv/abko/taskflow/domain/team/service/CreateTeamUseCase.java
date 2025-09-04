@@ -3,7 +3,7 @@ package indiv.abko.taskflow.domain.team.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import indiv.abko.taskflow.domain.team.dto.response.TeamCreateResponse;
+import indiv.abko.taskflow.domain.team.dto.response.CreateTeamResponse;
 import indiv.abko.taskflow.domain.team.entity.Team;
 import indiv.abko.taskflow.domain.team.exception.TeamErrorCode;
 import indiv.abko.taskflow.domain.team.repository.TeamRepository;
@@ -17,7 +17,7 @@ public class CreateTeamUseCase {
 
 	// 팀 생성
 	@Transactional
-	public TeamCreateResponse execute(String name, String description) {
+	public CreateTeamResponse execute(String name, String description) {
 		if (teamRepository.existsByName(name)) {
 			throw new BusinessException(TeamErrorCode.DUPLICATE_TEAM_NAME);
 		}
@@ -26,7 +26,7 @@ public class CreateTeamUseCase {
 
 		teamRepository.save(team);
 
-		return new TeamCreateResponse(
+		return new CreateTeamResponse(
 			team.getId(),
 			team.getName(),
 			team.getDescription(),
