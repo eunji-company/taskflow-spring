@@ -48,7 +48,7 @@ public class WriteCommentToTaskUseCaseTest {
 		String content = "content";
 		WriteCommentToTaskResponse resp = new WriteCommentToTaskResponse(
 			1L,
-			null,
+			content,
 			testTaskId,
 			testMemberId,
 			null,
