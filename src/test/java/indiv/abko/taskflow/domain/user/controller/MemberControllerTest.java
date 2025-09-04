@@ -10,8 +10,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.data.auditing.AuditingHandler;
-import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -34,12 +32,6 @@ public class MemberControllerTest {
 
 	@MockitoBean
 	ViewMembersInfoUseCase viewMembersInfoUseCase;
-
-	@MockitoBean(name = "jpaMappingContext")
-	JpaMetamodelMappingContext jpaMetamodelMappingContext;
-
-	@MockitoBean(name = "jpaAuditingHandler")
-	AuditingHandler jpaAuditingHandler;
 
 	@Test
 	@WithMockAuthMember(memberId = 1L, userRole = UserRole.USER)
