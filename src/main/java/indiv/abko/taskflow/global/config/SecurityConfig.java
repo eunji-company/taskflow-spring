@@ -12,6 +12,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import indiv.abko.taskflow.domain.auth.exception.AuthErrorCode;
+import indiv.abko.taskflow.global.auth.CustomAuthenticationEntryPoint;
 import indiv.abko.taskflow.global.exception.BusinessException;
 import indiv.abko.taskflow.global.jwt.JwtAuthenticationConverter;
 import indiv.abko.taskflow.global.jwt.JwtUtil;
@@ -24,6 +25,7 @@ public class SecurityConfig {
 
 	private final JwtUtil jwtUtil;
 	private final JwtAuthenticationConverter jwtAuthenticationConverter;
+	private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -36,7 +38,8 @@ public class SecurityConfig {
 			)
 			.oauth2ResourceServer(oauth2 -> oauth2
 				.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter))
-			);
+			)
+			.exceptionHandling(handler -> handler.authenticationEntryPoint(customAuthenticationEntryPoint));
 
 		return http.build();
 	}

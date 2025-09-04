@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import indiv.abko.taskflow.domain.auth.exception.AuthErrorCode;
 import indiv.abko.taskflow.global.dto.CommonResponse;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,21 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<CommonResponse<?>> handleBusinessException(BusinessException ex) {
 		CommonResponse<?> response = CommonResponse.failure(ex.getMessage(), null);
 		HttpStatus status = ex.getErrorCode().getHttpStatus();
+
+		return new ResponseEntity<>(response, status);
+	}
+
+	@ExceptionHandler(AuthenticationException.class)
+	public ResponseEntity<CommonResponse<?>> handleAuthenticationException(AuthenticationException ex) {
+		ErrorCode errorCode;
+		if (ex.getCause() instanceof BusinessException businessException) {
+			errorCode = businessException.getErrorCode();
+		} else {
+			errorCode = AuthErrorCode.AUTHENTICATION_FAILED;
+		}
+
+		CommonResponse<?> response = CommonResponse.failure(errorCode.getMessage(), null);
+		HttpStatus status = errorCode.getHttpStatus();
 
 		return new ResponseEntity<>(response, status);
 	}
