@@ -1,0 +1,33 @@
+package indiv.abko.taskflow.domain.auth.controller;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import indiv.abko.taskflow.domain.auth.dto.command.RegisterCommand;
+import indiv.abko.taskflow.domain.auth.dto.request.RegisterRequest;
+import indiv.abko.taskflow.domain.auth.dto.response.RegisterResponse;
+import indiv.abko.taskflow.domain.auth.mapper.AuthMapper;
+import indiv.abko.taskflow.domain.auth.service.RegisterUseCase;
+import indiv.abko.taskflow.global.dto.CommonResponse;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api")
+public class AuthController {
+
+	private final RegisterUseCase registerUseCase;
+	private final AuthMapper authMapper;
+
+	@PostMapping("/auth/register")
+	public CommonResponse<RegisterResponse> register(
+		@Valid @RequestBody RegisterRequest request
+	) {
+		RegisterCommand command = authMapper.toRegisterCommand(request);
+		RegisterResponse response = registerUseCase.execute(command);
+		return CommonResponse.success("회원가입이 완료되었습니다.", response);
+	}
+}
