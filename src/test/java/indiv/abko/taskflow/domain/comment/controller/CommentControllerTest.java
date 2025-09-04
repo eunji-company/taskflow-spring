@@ -9,8 +9,6 @@ import java.time.Instant;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.data.auditing.AuditingHandler;
-import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,12 +26,6 @@ import indiv.abko.taskflow.global.auth.WithMockAuthMember;
 
 @WebMvcTest(CommentController.class)
 public class CommentControllerTest {
-	@MockitoBean(name = "jpaMappingContext")
-	JpaMetamodelMappingContext jpaMetamodelMappingContext;
-
-	@MockitoBean(name = "jpaAuditingHandler")
-	AuditingHandler jpaAuditingHandler;
-
 	@MockitoBean
 	private WriteCommentToTaskUseCase writeCommentToTaskUseCase;
 
