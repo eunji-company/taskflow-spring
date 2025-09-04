@@ -52,12 +52,7 @@ public class DeleteMyCommentUseCaseTest {
 		// given
 		DeleteMyCommentCommand command = new DeleteMyCommentCommand(1L, 1L);
 
-		Member member = Mockito.mock(Member.class);
-		given(member.getId()).willReturn(1L);
-		Comment comment = Mockito.mock(Comment.class);
-		given(comment.getMember()).willReturn(member);
-
-		given(commentRepository.findWithAuthorById(1L)).willReturn(Optional.empty());
+		given(commentRepository.findWithAuthorById(anyLong())).willReturn(Optional.empty());
 
 		// when & then
 		BusinessException ex = assertThrows(BusinessException.class, () -> deleteMyCommentUseCase.execute(command));
@@ -75,7 +70,7 @@ public class DeleteMyCommentUseCaseTest {
 		Comment comment = Mockito.mock(Comment.class);
 		given(comment.getMember()).willReturn(member);
 
-		given(commentRepository.findWithAuthorById(1L)).willReturn(Optional.of(comment));
+		given(commentRepository.findWithAuthorById(anyLong())).willReturn(Optional.of(comment));
 
 		// when & then
 		BusinessException ex = assertThrows(BusinessException.class, () -> deleteMyCommentUseCase.execute(command));
