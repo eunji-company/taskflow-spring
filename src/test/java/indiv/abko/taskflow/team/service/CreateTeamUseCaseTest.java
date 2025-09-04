@@ -11,7 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import indiv.abko.taskflow.domain.team.dto.response.TeamCreateResponse;
+import indiv.abko.taskflow.domain.team.dto.response.CreateTeamResponse;
 import indiv.abko.taskflow.domain.team.entity.Team;
 import indiv.abko.taskflow.domain.team.exception.TeamErrorCode;
 import indiv.abko.taskflow.domain.team.repository.TeamRepository;
@@ -39,7 +39,7 @@ public class CreateTeamUseCaseTest {
 		given(teamRepository.save(any())).willReturn(team);
 
 		// when
-		TeamCreateResponse teamCreateResponse = useCase.execute(name, description);
+		CreateTeamResponse teamCreateResponse = useCase.execute(name, description);
 
 		// then
 		assertThat(teamCreateResponse).isNotNull();
