@@ -10,11 +10,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import indiv.abko.taskflow.domain.comment.dto.command.DeleteMyCommentCommand;
 import indiv.abko.taskflow.domain.comment.dto.response.WriteCommentToTaskResponse;
 import indiv.abko.taskflow.domain.comment.entity.Comment;
 import indiv.abko.taskflow.domain.task.entity.Task;
 import indiv.abko.taskflow.domain.user.entity.Member;
 import indiv.abko.taskflow.domain.user.entity.UserRole;
+import indiv.abko.taskflow.global.auth.AuthMember;
 
 @ExtendWith(MockitoExtension.class)
 public class CommentMapperTest {
@@ -62,5 +64,20 @@ public class CommentMapperTest {
 		assertEquals(commentId, resp.id());
 		assertEquals(commentContent, resp.content());
 		assertEquals(taskId, resp.taskId());
+	}
+
+	@Test
+	void DeleteMyCommentCommand를_정확하게_매핑한다() {
+		// given
+		AuthMember member = new AuthMember(1L, UserRole.USER);
+		long commentId = 1L;
+
+		// when
+		DeleteMyCommentCommand command = commentMapper.toDeleteMyCommentCommand(member, commentId);
+
+		// then
+		assertNotNull(command);
+		assertEquals(member.memberId(), command.requesterId());
+		assertEquals(commentId, command.targetCommentId());
 	}
 }
