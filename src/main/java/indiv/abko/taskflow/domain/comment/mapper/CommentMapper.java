@@ -12,6 +12,7 @@ import indiv.abko.taskflow.domain.comment.entity.Comment;
 import indiv.abko.taskflow.domain.task.entity.Task;
 import indiv.abko.taskflow.domain.user.entity.Member;
 import indiv.abko.taskflow.global.auth.AuthMember;
+import indiv.abko.taskflow.global.dto.DtoConstants;
 
 @Component
 public class CommentMapper {
@@ -29,8 +30,8 @@ public class CommentMapper {
 				member.getEmail(),
 				member.getUserRole().getKey()),
 			null,
-			savedComment.getCreatedAt().toInstant(ZoneOffset.UTC),
-			savedComment.getCreatedAt().toInstant(ZoneOffset.UTC));
+			savedComment.getCreatedAt().toInstant(DtoConstants.REAL_TIME_ZONE_OFFSET),
+			savedComment.getCreatedAt().toInstant(DtoConstants.REAL_TIME_ZONE_OFFSET));
 	}
 
 	public WriteCommentToTaskCommand toWriteCommentToTaskCommand(AuthMember authMember, long taskId,
