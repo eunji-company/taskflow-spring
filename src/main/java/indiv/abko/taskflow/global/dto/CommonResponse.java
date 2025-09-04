@@ -8,16 +8,14 @@ public record CommonResponse<T>(
 	boolean success,
 	String message,
 	T data,
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
-	Instant timestamp
-) {
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DtoConstants.TIME_FORMAT, timezone = DtoConstants.TIME_ZONE)
+	Instant timestamp) {
 	public static <T> CommonResponse<T> success(String message, T data) {
 		return new CommonResponse<>(
 			true,
 			message,
 			data,
-			Instant.now()
-		);
+			Instant.now());
 	}
 
 	public static <T> CommonResponse<T> failure(String message, T data) {
@@ -25,7 +23,6 @@ public record CommonResponse<T>(
 			false,
 			message,
 			data,
-			Instant.now()
-		);
+			Instant.now());
 	}
 }
