@@ -50,7 +50,7 @@ public class DeleteTeamUseCaseTest {
 
 		// when
 		BusinessException exception = assertThrows(BusinessException.class,
-			() -> useCase.execute(anyLong()));
+			() -> useCase.execute(1L));
 
 		// then
 		verify(teamRepository, never()).delete(any());
