@@ -8,7 +8,7 @@ public record CommonResponse<T>(
 	boolean success,
 	String message,
 	T data,
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DtoConstants.TIME_FORMAT, timezone = DtoConstants.TIME_ZONE_STRING)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DtoConstants.TIME_FORMAT, timezone = DtoConstants.DISPLAY_TIME_ZONE_STRING)
 	Instant timestamp) {
 	public static <T> CommonResponse<T> success(String message, T data) {
 		return new CommonResponse<>(
