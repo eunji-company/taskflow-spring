@@ -1,9 +1,8 @@
 package indiv.abko.taskflow.domain.team.dto.request;
 
-import lombok.Getter;
+import jakarta.validation.constraints.NotBlank;
 
-@Getter
-public class TeamCreateRequest {
-	private String name;                // 이름
-	private String description;        // 설명
+public record TeamCreateRequest(
+	@NotBlank(message = "이름은 필수로 입력해주셔야 합니다.") String name,
+	@NotBlank(message = "설명은 필수로 입력해주셔야 합니다.") String description) {
 }

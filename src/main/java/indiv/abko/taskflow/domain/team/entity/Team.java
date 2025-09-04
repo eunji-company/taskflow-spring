@@ -22,9 +22,10 @@ public class Team extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false)
+	@Column(unique = true, nullable = false)
 	private String name;
 
+	@Column(nullable = false)
 	private String description;
 
 	public Team(String name, String description) {
