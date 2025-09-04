@@ -10,14 +10,17 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import indiv.abko.taskflow.domain.user.entity.Member;
 import indiv.abko.taskflow.domain.user.entity.UserRole;
+import indiv.abko.taskflow.global.config.JpaAuditingConfig;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
 @DataJpaTest
+@Import(JpaAuditingConfig.class)
 public class MemberRepositoryTest {
 	@Autowired
 	private MemberRepository memberRepository;
@@ -88,7 +91,6 @@ public class MemberRepositoryTest {
 		Member foundMember2 = result.get(1);
 
 		assertAll(
-
 			() -> assertNotNull(foundMember1.getId()),
 			() -> assertEquals(member1.getUsername(), foundMember1.getUsername()),
 			() -> assertEquals(member1.getPassword(), foundMember1.getPassword()),
