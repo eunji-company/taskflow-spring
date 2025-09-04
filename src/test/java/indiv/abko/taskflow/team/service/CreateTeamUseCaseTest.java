@@ -47,7 +47,7 @@ public class CreateTeamUseCaseTest {
 	}
 
 	@Test
-	public void 팀이_존재하는_경우_TeamBusinessException_에러를_던진다() {
+	public void 팀이_존재하는_경우_BusinessException_에러를_던진다() {
 		// given
 		String name = "개발팀";
 		String description = "";
