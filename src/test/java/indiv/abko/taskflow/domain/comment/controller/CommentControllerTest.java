@@ -23,9 +23,10 @@ import indiv.abko.taskflow.domain.comment.service.WriteCommentToTaskUseCase;
 import indiv.abko.taskflow.domain.user.entity.UserRole;
 import indiv.abko.taskflow.global.auth.AuthMember;
 import indiv.abko.taskflow.global.auth.WithMockAuthMember;
+import indiv.abko.taskflow.support.ControllerTestSupport;
 
 @WebMvcTest(CommentController.class)
-public class CommentControllerTest {
+public class CommentControllerTest extends ControllerTestSupport {
 	@MockitoBean
 	private WriteCommentToTaskUseCase writeCommentToTaskUseCase;
 
