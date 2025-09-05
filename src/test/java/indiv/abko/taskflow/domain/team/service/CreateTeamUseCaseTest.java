@@ -1,4 +1,4 @@
-package indiv.abko.taskflow.team.service;
+package indiv.abko.taskflow.domain.team.service;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,7 +15,6 @@ import indiv.abko.taskflow.domain.team.dto.response.CreateTeamResponse;
 import indiv.abko.taskflow.domain.team.entity.Team;
 import indiv.abko.taskflow.domain.team.exception.TeamErrorCode;
 import indiv.abko.taskflow.domain.team.repository.TeamRepository;
-import indiv.abko.taskflow.domain.team.service.CreateTeamUseCase;
 import indiv.abko.taskflow.global.exception.BusinessException;
 
 @ExtendWith(MockitoExtension.class)
