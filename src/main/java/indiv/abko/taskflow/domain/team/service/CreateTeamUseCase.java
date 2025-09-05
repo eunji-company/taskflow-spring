@@ -1,5 +1,7 @@
 package indiv.abko.taskflow.domain.team.service;
 
+import java.util.ArrayList;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +32,7 @@ public class CreateTeamUseCase {
 			team.getId(),
 			team.getName(),
 			team.getDescription(),
-			team.getCreatedAt());
+			team.getCreatedAt(),
+			new ArrayList<>());
 	}
 }
