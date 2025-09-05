@@ -24,7 +24,7 @@ public class ReadTeamUseCaseTest {
 	private TeamMemberRepository teamMemberRepository;
 
 	@InjectMocks
-	private ReadTeamUseCase readTeamUseCase;
+	private ReadTeamUseCase useCase;
 
 	@Test
 	void 팀_목록_조회를_성공한다() {
@@ -40,7 +40,7 @@ public class ReadTeamUseCaseTest {
 		when(teamMemberRepository.findAllWithFetchBy()).thenReturn(team.getTeamMembers());
 
 		// when
-		List<ReadTeamResponse> responses = readTeamUseCase.execute();
+		List<ReadTeamResponse> responses = useCase.execute();
 
 		// then
 		assertThat(responses).hasSize(1);
