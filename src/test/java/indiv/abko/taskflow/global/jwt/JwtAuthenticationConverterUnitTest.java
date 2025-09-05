@@ -21,13 +21,13 @@ class JwtAuthenticationConverterUnitTest {
 	void convert() {
 		// given
 		long memberId = 1L;
-		UserRole userRole = UserRole.USER;
+		String userRole = UserRole.USER.getKey();
 		String tokenValue = "test-token";
 
 		Jwt jwt = Jwt.withTokenValue(tokenValue)
 			.header("alg", "HS256")
 			.subject(String.valueOf(memberId))
-			.claim("auth", userRole.name())
+			.claim("auth", userRole)
 			.issuedAt(Instant.now())
 			.expiresAt(Instant.now().plusSeconds(60))
 			.build();
@@ -41,10 +41,9 @@ class JwtAuthenticationConverterUnitTest {
 
 		AuthMember authMember = (AuthMember)authentication.getPrincipal();
 		assertThat(authMember.memberId()).isEqualTo(memberId);
-		assertThat(authMember.userRole()).isEqualTo(userRole);
 
 		assertThat(authentication.getAuthorities()).hasSize(1);
 		GrantedAuthority authority = authentication.getAuthorities().iterator().next();
-		assertThat(authority.getAuthority()).isEqualTo(userRole.getKey());
+		assertThat(authority.getAuthority()).isEqualTo(userRole);
 	}
 }

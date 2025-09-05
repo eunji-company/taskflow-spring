@@ -69,7 +69,7 @@ public class CommentMapperTest {
 	@Test
 	void DeleteMyCommentCommand를_정확하게_매핑한다() {
 		// given
-		AuthMember member = new AuthMember(1L, UserRole.USER);
+		AuthMember member = new AuthMember(1L);
 		long commentId = 1L;
 
 		// when

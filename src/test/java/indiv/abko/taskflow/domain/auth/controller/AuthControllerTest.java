@@ -20,6 +20,7 @@ import indiv.abko.taskflow.domain.auth.dto.command.RegisterCommand;
 import indiv.abko.taskflow.domain.auth.dto.request.RegisterRequest;
 import indiv.abko.taskflow.domain.auth.dto.response.RegisterResponse;
 import indiv.abko.taskflow.domain.auth.mapper.AuthMapper;
+import indiv.abko.taskflow.domain.auth.service.LoginUseCase;
 import indiv.abko.taskflow.domain.auth.service.RegisterUseCase;
 import indiv.abko.taskflow.support.ControllerTestSupport;
 
@@ -28,6 +29,9 @@ public class AuthControllerTest extends ControllerTestSupport {
 
 	@MockitoBean
 	private RegisterUseCase registerUseCase;
+
+	@MockitoBean
+	private LoginUseCase loginUseCase;
 
 	@MockitoBean
 	private AuthMapper authMapper;
@@ -65,7 +69,7 @@ public class AuthControllerTest extends ControllerTestSupport {
 		@Test
 		void 아이디_검증에_실패하여_회원가입에_실패한다() throws Exception {
 			// given
-			RegisterRequest request = new RegisterRequest("", "test@test.com", "password123!", "testName");
+			RegisterRequest request = new RegisterRequest("", "password123!", "test@test.com", "testName");
 
 			// when & then
 			mockMvc.perform(
@@ -79,7 +83,7 @@ public class AuthControllerTest extends ControllerTestSupport {
 		@Test
 		void 이메일_검증에_실패하여_회원가입에_실패한다() throws Exception {
 			// given
-			RegisterRequest request = new RegisterRequest("test", "test", "password123!", "testName");
+			RegisterRequest request = new RegisterRequest("test", "password123!", "test", "testName");
 
 			// when & then
 			mockMvc.perform(
@@ -93,7 +97,7 @@ public class AuthControllerTest extends ControllerTestSupport {
 		@Test
 		void 비밀번호_검증에_실패하여_회원가입에_실패한다() throws Exception {
 			// given
-			RegisterRequest request = new RegisterRequest("test", "test@test.com", "pass", "testName");
+			RegisterRequest request = new RegisterRequest("test", "pass", "test@test.com", "testName");
 
 			// when & then
 			mockMvc.perform(
@@ -107,7 +111,7 @@ public class AuthControllerTest extends ControllerTestSupport {
 		@Test
 		void 이름_검증에_실패하여_회원가입에_실패한다() throws Exception {
 			// given
-			RegisterRequest request = new RegisterRequest("test", "test@test.com", "password123!", "");
+			RegisterRequest request = new RegisterRequest("test", "password123!", "test@test.com", "");
 
 			// when & then
 			mockMvc.perform(

@@ -19,9 +19,10 @@ class JwtAuthenticationTokenUnitTest {
 	@DisplayName("JwtAuthenticationToken 생성 시 principal, credentials, authorities가 올바르게 설정되고 인증 상태가 true가 된다")
 	void createToken() {
 		// given
-		AuthMember principal = new AuthMember(1L, UserRole.USER);
+		AuthMember principal = new AuthMember(1L);
 		String credentials = "jwt-token-string";
-		Collection<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(UserRole.USER.getKey()));
+		Collection<GrantedAuthority> authorities = Collections.singletonList(
+			new SimpleGrantedAuthority(UserRole.USER.getKey()));
 
 		// when
 		JwtAuthenticationToken token = new JwtAuthenticationToken(principal, credentials, authorities);

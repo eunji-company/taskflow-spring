@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
-import indiv.abko.taskflow.global.auth.AuthMember;
+import indiv.abko.taskflow.domain.user.entity.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -37,13 +37,13 @@ public class JwtUtil {
 		this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
 	}
 
-	public String createAccessToken(AuthMember authMember) {
+	public String createAccessToken(Long memberId, UserRole userRole) {
 		long now = (new Date()).getTime();
 		Date validity = new Date(now + this.accessTokenValiditySeconds * 1000);
 
 		return Jwts.builder()
-			.setSubject(String.valueOf(authMember.memberId()))
-			.claim(AUTHORITIES_KEY, authMember.userRole().name())
+			.setSubject(String.valueOf(memberId))
+			.claim(AUTHORITIES_KEY, userRole.getKey())
 			.setIssuedAt(new Date(now))
 			.signWith(key, signatureAlgorithm)
 			.setExpiration(validity)
