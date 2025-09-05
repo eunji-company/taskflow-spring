@@ -5,6 +5,7 @@ import java.util.List;
 
 import indiv.abko.taskflow.domain.user.entity.Member;
 import indiv.abko.taskflow.global.entity.BaseTimeEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,7 +35,7 @@ public class Team extends BaseTimeEntity {
 	private String description;
 
 	// 주인이 아닌 쪽은 읽기밖에 안됨
-	@OneToMany(mappedBy = "id.team")
+	@OneToMany(mappedBy = "id.team", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<TeamMember> teamMembers = new ArrayList<>();
 
 	public Team(String name, String description) {
