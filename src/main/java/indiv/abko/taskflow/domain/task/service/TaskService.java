@@ -1,7 +1,15 @@
 package indiv.abko.taskflow.domain.task.service;
 
-import org.springframework.stereotype.Service;
+import indiv.abko.taskflow.domain.task.entity.Task;
+import indiv.abko.taskflow.domain.user.repository.MemberRepository;
 
-@Service
-public class TaskService implements TaskServiceApi {
+public class TaskService implements TaskServiceApi{
+
+
+
+	public Task getByIdOrThrow(long taskId) {
+		// 기본키를 사용하여 Task를 가져온다
+		// 없으면 예외처리
+		return null;
+	}
 }

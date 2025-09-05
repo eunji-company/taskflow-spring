@@ -1,5 +1,6 @@
 package indiv.abko.taskflow.domain.task.entity;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 import indiv.abko.taskflow.domain.user.entity.Member;
@@ -51,4 +52,12 @@ public class Task extends BaseTimeEntity {
 	private LocalDateTime dueDate;
 
 	private LocalDateTime deletedAt;
+
+	public Task(String title, String description, LocalDateTime dueDate, TaskPriority priority, Long assigneeId) {
+		this.title = title;
+		this.description = description;
+		this.dueDate = dueDate;
+		this.priority = priority;
+		this.status = TaskStatus.TODO;
+	}
 }
