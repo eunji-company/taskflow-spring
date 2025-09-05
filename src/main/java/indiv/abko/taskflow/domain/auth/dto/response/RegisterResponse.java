@@ -4,6 +4,9 @@ import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import lombok.Builder;
+
+@Builder
 public record RegisterResponse(
 	long id,
 	String username,
@@ -13,16 +16,4 @@ public record RegisterResponse(
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
 	Instant createdAt
 ) {
-
-	public static RegisterResponse of(
-		long id,
-		String username,
-		String email,
-		String name,
-		String role,
-		Instant createdAt
-	) {
-
-		return new RegisterResponse(id, username, email, name, role, createdAt);
-	}
 }
