@@ -2,7 +2,6 @@ package indiv.abko.taskflow.domain.task.dto.reqeust;
 
 import indiv.abko.taskflow.domain.task.entity.TaskPriority;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -20,5 +19,3 @@ public class CreateTaskRequest {
 	private Long assigneeId;
 
 }
-
-
