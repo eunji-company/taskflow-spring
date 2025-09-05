@@ -2,7 +2,11 @@ package indiv.abko.taskflow.global.dto;
 
 import java.time.ZoneOffset;
 
-public interface DtoConstants {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class DtoConstants {
     public static final String TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     public static final String DISPLAY_TIME_ZONE_STRING = "UTC";
     // 한국시간입니다
