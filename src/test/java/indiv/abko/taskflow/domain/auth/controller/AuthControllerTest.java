@@ -45,8 +45,8 @@ public class AuthControllerTest extends ControllerTestSupport {
 		@Test
 		void 회원가입에_성공한다() throws Exception {
 			// given
-			RegisterRequest request = new RegisterRequest("test", "test@test.com", "password123!", "testName");
-			RegisterCommand command = new RegisterCommand("test", "test@test.com", "password123!", "testName");
+			RegisterRequest request = new RegisterRequest("test", "password123!", "test@test.com", "testName");
+			RegisterCommand command = new RegisterCommand("test", "password123!", "test@test.com", "testName");
 			RegisterResponse response = new RegisterResponse(1L, "test", "test@test.com", "testName", "USER",
 				Instant.now());
 
