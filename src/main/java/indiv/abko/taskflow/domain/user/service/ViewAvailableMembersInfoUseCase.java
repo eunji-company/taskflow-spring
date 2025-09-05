@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import indiv.abko.taskflow.domain.team.entity.Team;
 import indiv.abko.taskflow.domain.team.service.TeamServiceApi;
 import indiv.abko.taskflow.domain.user.dto.MemberInfoResponse;
+import indiv.abko.taskflow.domain.user.entity.Member;
 import indiv.abko.taskflow.domain.user.exception.MemberErrorCode;
 import indiv.abko.taskflow.domain.user.repository.MemberRepository;
 import indiv.abko.taskflow.global.exception.BusinessException;
@@ -20,13 +22,17 @@ public class ViewAvailableMembersInfoUseCase {
 
 	@Transactional(readOnly = true)
 	public List<MemberInfoResponse> execute(Long teamId, Long memberId) {
-		memberRepository.findById(memberId)
+		Member member = memberRepository.findById(memberId)
 			.orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
 
-		teamService.existsById(teamId);
+		Team team = teamService.getByIdOrThrow(teamId);
 
-		teamService.existsMemberInTeam(teamId, memberId);
+		teamService.assertMemberInTeamOrThrow(team, member);
 
-		return teamService.getAvailableMembersForTeam(teamId);
+		return memberRepository.findAvailableMembersForTeam(team)
+			.stream()
+			.map(m -> new MemberInfoResponse(m.getId(), m.getUsername(), m.getEmail(),
+				m.getName(), m.getUserRole().name(), m.getCreatedAt()))
+			.toList();
 	}
 }

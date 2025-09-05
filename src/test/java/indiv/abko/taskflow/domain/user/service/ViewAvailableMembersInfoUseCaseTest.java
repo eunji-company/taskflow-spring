@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import indiv.abko.taskflow.domain.team.entity.Team;
 import indiv.abko.taskflow.domain.team.exception.TeamErrorCode;
 import indiv.abko.taskflow.domain.team.service.TeamServiceApi;
 import indiv.abko.taskflow.domain.user.dto.MemberInfoResponse;
@@ -41,23 +42,44 @@ public class ViewAvailableMembersInfoUseCaseTest {
 		//given
 		Long teamId = 1L;
 		Long memberId = 1L;
+
 		Member member1 = Member.of("testusername", "HASHED_PW", "test@example.com", "testname", UserRole.USER);
 		ReflectionTestUtils.setField(member1, "id", 1L);
 		given(memberRepository.findById(memberId)).willReturn(Optional.of(member1));
-		List<MemberInfoResponse> expected = List.of(
-			new MemberInfoResponse(member1.getId(), member1.getUsername(), member1.getEmail(), member1.getName(),
-				member1.getUserRole().name(), member1.getCreatedAt()));
-		given(teamService.getAvailableMembersForTeam(teamId)).willReturn(expected);
+
+		Team team = new Team("teamName", "teamDescription");
+		given(teamService.getByIdOrThrow(teamId)).willReturn(team);
+
+		Member member2 = Member.of("testusername2", "HASHED_PW2", "test2@example.com", "testname2", UserRole.ADMIN);
+		ReflectionTestUtils.setField(member2, "id", 2L);
+
+		Member member3 = Member.of("testusername3", "HASHED_PW3", "test3@example.com", "testname3", UserRole.USER);
+		ReflectionTestUtils.setField(member3, "id", 3L);
+
+		List<Member> expected = List.of(member2, member3);
+		given(memberRepository.findAvailableMembersForTeam(team)).willReturn(expected);
 
 		//when
 		List<MemberInfoResponse> result = viewAvailableMembersInfoUseCase.execute(teamId, memberId);
 
 		//then
-		assertThat(result).isEqualTo(expected);
+		assertThat(result).hasSize(2);
+		assertThat(result)
+			.extracting(
+				MemberInfoResponse::id,
+				MemberInfoResponse::username,
+				MemberInfoResponse::email,
+				MemberInfoResponse::name,
+				MemberInfoResponse::role
+			)
+			.containsExactly(
+				tuple(2L, "testusername2", "test2@example.com", "testname2", "ADMIN"),
+				tuple(3L, "testusername3", "test3@example.com", "testname3", "USER")
+			);
 		verify(memberRepository, times(1)).findById(memberId);
-		verify(teamService, times(1)).existsById(teamId);
-		verify(teamService, times(1)).existsMemberInTeam(teamId, memberId);
-		verify(teamService, times(1)).getAvailableMembersForTeam(teamId);
+		verify(teamService, times(1)).getByIdOrThrow(teamId);
+		verify(teamService, times(1)).assertMemberInTeamOrThrow(team, member1);
+		verify(memberRepository, times(1)).findAvailableMembersForTeam(team);
 	}
 
 	@Test
@@ -90,7 +112,7 @@ public class ViewAvailableMembersInfoUseCaseTest {
 		ReflectionTestUtils.setField(member1, "id", 1L);
 		given(memberRepository.findById(memberId)).willReturn(Optional.of(member1));
 		doThrow(new BusinessException(TeamErrorCode.NOT_FOUND_TEAM))
-			.when(teamService).existsById(teamId);
+			.when(teamService).getByIdOrThrow(teamId);
 
 		//when
 		BusinessException exception = assertThrows(BusinessException.class,
@@ -101,34 +123,35 @@ public class ViewAvailableMembersInfoUseCaseTest {
 			() -> assertEquals(TeamErrorCode.NOT_FOUND_TEAM, exception.getErrorCode()));
 
 		verify(memberRepository, times(1)).findById(memberId);
-		verify(teamService, times(1)).existsById(teamId);
+		verify(teamService, times(1)).getByIdOrThrow(teamId);
 		verifyNoMoreInteractions(teamService);
 	}
 
 	@Test
-	@DisplayName("사용자가 팀에 속하지 않을 시 MEMBER_NOT_IN_TEAM 오류를 반환한다.")
-	public void viewAvailableMembersInfoUseCase_사용자가_팀에_속하지_않으면_MEMBER_NOT_IN_TEAM() {
+	@DisplayName("사용자가 팀에 속하지 않을 시 NOT_TEAM_MEMBER 오류를 반환한다.")
+	public void viewAvailableMembersInfoUseCase_사용자가_팀에_속하지_않으면_NOT_TEAM_MEMBER() {
 		//given
 		Long teamId = 1L;
 		Long memberId = 1L;
 		Member member1 = Member.of("testusername", "HASHED_PW", "test@example.com", "testname", UserRole.USER);
 		ReflectionTestUtils.setField(member1, "id", 1L);
 		given(memberRepository.findById(memberId)).willReturn(Optional.of(member1));
-		// TODO: TeamErrorCode.MEMBER_NOT_IN_TEAM 로 변경
-		doThrow(new BusinessException(TeamErrorCode.NOT_FOUND_TEAM))
-			.when(teamService).existsMemberInTeam(teamId, memberId);
+		Team team = new Team("teamName", "teamDescription");
+		given(teamService.getByIdOrThrow(teamId)).willReturn(team);
+		doThrow(new BusinessException(TeamErrorCode.NOT_TEAM_MEMBER))
+			.when(teamService).assertMemberInTeamOrThrow(team, member1);
 
 		//when
 		BusinessException exception = assertThrows(BusinessException.class,
 			() -> viewAvailableMembersInfoUseCase.execute(teamId, memberId));
 
 		//then
-		assertAll(() -> assertEquals(TeamErrorCode.NOT_FOUND_TEAM.getMessage(), exception.getMessage()),
-			() -> assertEquals(TeamErrorCode.NOT_FOUND_TEAM, exception.getErrorCode()));
+		assertAll(() -> assertEquals(TeamErrorCode.NOT_TEAM_MEMBER.getMessage(), exception.getMessage()),
+			() -> assertEquals(TeamErrorCode.NOT_TEAM_MEMBER, exception.getErrorCode()));
 
 		verify(memberRepository, times(1)).findById(memberId);
-		verify(teamService, times(1)).existsById(teamId);
-		verify(teamService, times(1)).existsMemberInTeam(teamId, memberId);
+		verify(teamService, times(1)).getByIdOrThrow(teamId);
+		verify(teamService, times(1)).assertMemberInTeamOrThrow(team, member1);
 		verifyNoMoreInteractions(teamService);
 	}
 

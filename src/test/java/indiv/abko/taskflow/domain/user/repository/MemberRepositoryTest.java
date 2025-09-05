@@ -1,5 +1,6 @@
 package indiv.abko.taskflow.domain.user.repository;
 
+import static org.assertj.core.api.AssertionsForInterfaceTypes.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import indiv.abko.taskflow.domain.team.entity.Team;
 import indiv.abko.taskflow.domain.user.entity.Member;
 import indiv.abko.taskflow.domain.user.entity.UserRole;
 import indiv.abko.taskflow.global.config.JpaAuditingConfig;
@@ -123,6 +125,75 @@ public class MemberRepositoryTest {
 
 		//then
 		assertTrue(result.isEmpty());
+	}
+
+	@Test
+	@DisplayName("해당 팀에 속하지 않고 삭제되지 않은 모든 사용자를 조회한다")
+	void findAvailableMembersForTeam_성공() {
+		//given
+		Team team1 = new Team("Team1", "Description1");
+		em.persist(team1);
+
+		Member memberInTeam = Member.of("testusername", "HASHED_PW", "test@example.com", "testname", UserRole.USER);
+		Member member1 = Member.of("testusername1", "HASHED_PW1", "test1@example.com", "testname1", UserRole.USER);
+		Member member2 = Member.of("testusername2", "HASHED_PW2", "test2@example.com", "testname2", UserRole.ADMIN);
+		Member deletedMember3 = Member.of("testusername3", "HASHED_PW3", "test3@example.com", "testname3",
+			UserRole.USER);
+		ReflectionTestUtils.setField(deletedMember3, "deletedAt", LocalDateTime.now());
+		memberRepository.save(memberInTeam);
+		memberRepository.save(member1);
+		memberRepository.save(member2);
+		memberRepository.save(deletedMember3);
+
+		team1.addMember(memberInTeam);
+
+		memberRepository.flush();
+		em.clear();
+
+		//when
+		List<Member> result = memberRepository.findAvailableMembersForTeam(team1);
+
+		//then
+		assertNotNull(result);
+		assertEquals(2, result.size());
+
+		assertThat(result)
+			.extracting(
+				Member::getUsername,
+				Member::getEmail,
+				Member::getName,
+				Member::getUserRole
+			)
+			.containsExactlyInAnyOrder(
+				tuple("testusername1", "test1@example.com", "testname1", UserRole.USER),
+				tuple("testusername2", "test2@example.com", "testname2", UserRole.ADMIN)
+			);
+	}
+
+	@Test
+	@DisplayName("모든 사용자가 팀에 속해있을 경우 빈 목록을 조회한다")
+	void findAvailableMembersForTeam_모든_사용자가_팀에_속할경우_empty_list() {
+		//given
+		Team team1 = new Team("Team1", "Description1");
+		em.persist(team1);
+
+		Member memberInTeam = Member.of("testusername", "HASHED_PW", "test@example.com", "testname", UserRole.USER);
+		Member memberInTeam2 = Member.of("testusername2", "HASHED_PW2", "test2@example.com", "testname2",
+			UserRole.USER);
+		memberRepository.save(memberInTeam);
+		memberRepository.save(memberInTeam2);
+
+		team1.addMember(memberInTeam);
+		team1.addMember(memberInTeam2);
+
+		memberRepository.flush();
+		em.clear();
+
+		//when
+		List<Member> result = memberRepository.findAvailableMembersForTeam(team1);
+
+		//then
+		assertThat(result).isEmpty();
 	}
 
 }
