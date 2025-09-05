@@ -13,22 +13,22 @@ import indiv.abko.taskflow.domain.user.entity.Member;
 public class AuthMapper {
 
 	public RegisterResponse toRegisterResponse(Member member) {
-		return RegisterResponse.of(
-			member.getId(),
-			member.getUsername(),
-			member.getEmail(),
-			member.getName(),
-			member.getUserRole().name(),
-			member.getCreatedAt().toInstant(ZoneOffset.ofHours(9))
-		);
+		return RegisterResponse.builder()
+			.id(member.getId())
+			.username(member.getUsername())
+			.email(member.getEmail())
+			.name(member.getName())
+			.role(member.getUserRole().name())
+			.createdAt(member.getCreatedAt().toInstant(ZoneOffset.ofHours(9)))
+			.build();
 	}
 
 	public RegisterCommand toRegisterCommand(RegisterRequest request) {
-		return RegisterCommand.of(
-			request.username(),
-			request.email(),
-			request.password(),
-			request.name()
-		);
+		return RegisterCommand.builder()
+			.username(request.username())
+			.email(request.email())
+			.password(request.password())
+			.name(request.name())
+			.build();
 	}
 }

@@ -27,7 +27,7 @@ public class AuthController {
 		@Valid @RequestBody RegisterRequest request
 	) {
 		RegisterCommand command = authMapper.toRegisterCommand(request);
-		RegisterResponse response = registerUseCase.execute(command);
-		return CommonResponse.success("회원가입이 완료되었습니다.", response);
+		RegisterResponse result = registerUseCase.execute(command);
+		return CommonResponse.success("회원가입이 완료되었습니다.", result);
 	}
 }
