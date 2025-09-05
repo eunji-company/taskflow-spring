@@ -9,5 +9,5 @@ import indiv.abko.taskflow.domain.team.entity.TeamMember;
 
 public interface TeamMemberRepository extends JpaRepository<TeamMember, Long> {
 	@EntityGraph(attributePaths = {"id.team", "id.member"})
-	List<TeamMember> findAllWithFetch();
+	List<TeamMember> findAllWithFetchBy();
 }

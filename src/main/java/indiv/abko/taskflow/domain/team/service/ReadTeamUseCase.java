@@ -25,7 +25,7 @@ public class ReadTeamUseCase {
 	public List<ReadTeamResponse> execute() {
 		Map<Long, ReadTeamResponse> map = new HashMap<>();
 
-		List<TeamMember> teamMembers = teamMemberRepository.findAllWithFetch();
+		List<TeamMember> teamMembers = teamMemberRepository.findAllWithFetchBy();
 
 		for (TeamMember teamMember : teamMembers) {
 			Team team = teamMember.getId().getTeam();

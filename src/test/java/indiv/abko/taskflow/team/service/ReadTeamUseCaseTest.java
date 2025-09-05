@@ -38,7 +38,7 @@ public class ReadTeamUseCaseTest {
 		ReflectionTestUtils.setField(team, "id", 1L);
 		team.addMember(member);
 
-		when(teamMemberRepository.findAllWithFetch()).thenReturn(team.getTeamMembers());
+		when(teamMemberRepository.findAllWithFetchBy()).thenReturn(team.getTeamMembers());
 
 		// when
 		List<ReadTeamResponse> responses = readTeamUseCase.execute();
