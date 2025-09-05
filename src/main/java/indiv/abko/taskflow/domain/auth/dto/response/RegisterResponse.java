@@ -4,6 +4,7 @@ import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import indiv.abko.taskflow.global.dto.DtoConstants;
 import lombok.Builder;
 
 @Builder
@@ -13,7 +14,7 @@ public record RegisterResponse(
 	String email,
 	String name,
 	String role,
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DtoConstants.TIME_FORMAT, timezone = DtoConstants.DISPLAY_TIME_ZONE_STRING)
 	Instant createdAt
 ) {
 }

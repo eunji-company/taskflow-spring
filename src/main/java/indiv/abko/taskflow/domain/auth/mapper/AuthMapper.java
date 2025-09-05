@@ -1,13 +1,12 @@
 package indiv.abko.taskflow.domain.auth.mapper;
 
-import java.time.ZoneOffset;
-
 import org.springframework.stereotype.Component;
 
 import indiv.abko.taskflow.domain.auth.dto.command.RegisterCommand;
 import indiv.abko.taskflow.domain.auth.dto.request.RegisterRequest;
 import indiv.abko.taskflow.domain.auth.dto.response.RegisterResponse;
 import indiv.abko.taskflow.domain.user.entity.Member;
+import indiv.abko.taskflow.global.dto.DtoConstants;
 
 @Component
 public class AuthMapper {
@@ -19,7 +18,7 @@ public class AuthMapper {
 			.email(member.getEmail())
 			.name(member.getName())
 			.role(member.getUserRole().name())
-			.createdAt(member.getCreatedAt().toInstant(ZoneOffset.ofHours(9)))
+			.createdAt(member.getCreatedAt().toInstant(DtoConstants.REAL_TIME_ZONE_OFFSET))
 			.build();
 	}
 
