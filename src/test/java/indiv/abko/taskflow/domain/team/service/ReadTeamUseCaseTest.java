@@ -1,4 +1,4 @@
-package indiv.abko.taskflow.team.service;
+package indiv.abko.taskflow.domain.team.service;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -15,7 +15,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import indiv.abko.taskflow.domain.team.dto.response.ReadTeamResponse;
 import indiv.abko.taskflow.domain.team.entity.Team;
 import indiv.abko.taskflow.domain.team.repository.TeamMemberRepository;
-import indiv.abko.taskflow.domain.team.service.ReadTeamUseCase;
 import indiv.abko.taskflow.domain.user.entity.Member;
 import indiv.abko.taskflow.domain.user.entity.UserRole;
 
