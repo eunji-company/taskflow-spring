@@ -15,23 +15,27 @@ import lombok.RequiredArgsConstructor;
 public class MemberService implements MemberServiceApi {
 	private final MemberRepository memberRepository;
 
+	@Override
 	@Transactional(readOnly = true)
 	public Member getByIdOrThrow(long memberId) {
 		return memberRepository.findById(memberId)
 			.orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
 	}
 
+	@Override
 	@Transactional
 	public Member createMember(String username, String password, String email, String name) {
 		Member member = Member.of(username, password, email, name, UserRole.USER);
 		return memberRepository.save(member);
 	}
 
+	@Override
 	@Transactional(readOnly = true)
 	public boolean existsByUsername(String username) {
 		return memberRepository.existsByUsername(username);
 	}
 
+	@Override
 	@Transactional(readOnly = true)
 	public boolean existsByEmail(String email) {
 		return memberRepository.existsByEmail(email);
