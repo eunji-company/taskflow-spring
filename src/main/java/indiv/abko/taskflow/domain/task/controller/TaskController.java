@@ -8,7 +8,6 @@ import indiv.abko.taskflow.domain.task.service.TaskListUseCase;
 import indiv.abko.taskflow.global.auth.AuthMember;
 import indiv.abko.taskflow.global.dto.CommonResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +26,7 @@ public class TaskController {
 			@AuthenticationPrincipal AuthMember authMember,
 			@RequestBody CreateTaskRequest request
 	) {
-		CreateTaskResponse response = createTaskUseCase.createTask(authMember, request);
+		CreateTaskResponse response = createTaskUseCase.execute(authMember, request);
 		return CommonResponse.success("Task가 생성되었습니다.", response);
 	}
 
