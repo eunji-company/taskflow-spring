@@ -1,15 +1,23 @@
 package indiv.abko.taskflow.domain.task.service;
 
 import indiv.abko.taskflow.domain.task.entity.Task;
-import indiv.abko.taskflow.domain.user.repository.MemberRepository;
+import indiv.abko.taskflow.domain.task.exception.TaskErrorCode;
+import indiv.abko.taskflow.domain.task.repository.TaskRepository;
+import indiv.abko.taskflow.global.exception.BusinessException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-public class TaskService implements TaskServiceApi{
+@Service
+@RequiredArgsConstructor
+public class TaskService implements TaskServiceApi {
 
-
+	private final TaskRepository taskRepository;
 
 	public Task getByIdOrThrow(long taskId) {
-		// 기본키를 사용하여 Task를 가져온다
-		// 없으면 예외처리
-		return null;
+
+		return taskRepository.findById(taskId).orElseThrow(
+				() -> new BusinessException(TaskErrorCode.TASK_NOT_FOUND)
+		);
 	}
 }
+

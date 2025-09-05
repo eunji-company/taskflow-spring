@@ -19,7 +19,7 @@ public class CreateTaskUseCase {
 	private final TaskRepository taskRepository;
 
 	@Transactional
-	public CreateTaskResponse createTask(AuthMember authMember, CreateTaskRequest request) {
+	public CreateTaskResponse execute(AuthMember authMember, CreateTaskRequest request) {
 
 		Member member = memberServiceApi.getByIdOrThrow(request.getAssigneeId());
 

@@ -7,7 +7,6 @@ import indiv.abko.taskflow.domain.task.entity.TaskPriority;
 import indiv.abko.taskflow.domain.task.repository.TaskRepository;
 import indiv.abko.taskflow.domain.user.entity.Member;
 import indiv.abko.taskflow.domain.user.entity.UserRole;
-import indiv.abko.taskflow.domain.user.repository.MemberRepository;
 import indiv.abko.taskflow.domain.user.service.MemberServiceApi;
 import indiv.abko.taskflow.global.auth.AuthMember;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -74,7 +72,7 @@ public class CreateTaskUseCaseTest {
 
 		// when
 		CreateTaskResponse createTaskResponse = createTaskUseCase
-				.createTask(new AuthMember(1L, UserRole.ADMIN), createTaskRequest);
+				.execute(new AuthMember(1L, UserRole.ADMIN), createTaskRequest);
 
 		//then
 		assertThat(createTaskResponse).isNotNull();
