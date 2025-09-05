@@ -1,7 +1,10 @@
 package indiv.abko.taskflow.domain.team.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -12,9 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 import indiv.abko.taskflow.domain.team.dto.request.CreateTeamRequest;
 import indiv.abko.taskflow.domain.team.dto.request.UpdateTeamRequest;
 import indiv.abko.taskflow.domain.team.dto.response.CreateTeamResponse;
+import indiv.abko.taskflow.domain.team.dto.response.ReadTeamResponse;
 import indiv.abko.taskflow.domain.team.dto.response.UpdateTeamResponse;
 import indiv.abko.taskflow.domain.team.service.CreateTeamUseCase;
 import indiv.abko.taskflow.domain.team.service.DeleteTeamUseCase;
+import indiv.abko.taskflow.domain.team.service.ReadTeamUseCase;
 import indiv.abko.taskflow.domain.team.service.UpdateTeamUseCase;
 import indiv.abko.taskflow.global.dto.CommonResponse;
 import jakarta.validation.Valid;
@@ -26,6 +31,7 @@ public class TeamController {
 	private final CreateTeamUseCase createTeamUseCase;
 	private final UpdateTeamUseCase updateTeamUseCase;
 	private final DeleteTeamUseCase deleteTeamUseCase;
+	private final ReadTeamUseCase readTeamUseCase;
 
 	// 팀 생성
 	@PostMapping("/api/teams")
@@ -38,6 +44,15 @@ public class TeamController {
 			createTeamRequest.description());
 
 		return CommonResponse.success("팀이 성공적으로 생성되었습니다.", createTeamResponse);
+	}
+
+	// 팀 조회
+	@GetMapping("/api/teams")
+	public CommonResponse<List<ReadTeamResponse>> getAllTeams(
+	) {
+		List<ReadTeamResponse> readTeamResponses = readTeamUseCase.execute();
+
+		return CommonResponse.success("팀 목록을 조회했습니다.", readTeamResponses);
 	}
 
 	// 팀 수정
