@@ -18,6 +18,8 @@ import indiv.abko.taskflow.domain.team.entity.Team;
 import indiv.abko.taskflow.domain.team.exception.TeamErrorCode;
 import indiv.abko.taskflow.domain.team.repository.TeamRepository;
 import indiv.abko.taskflow.domain.team.service.UpdateTeamUseCase;
+import indiv.abko.taskflow.domain.user.entity.Member;
+import indiv.abko.taskflow.domain.user.entity.UserRole;
 import indiv.abko.taskflow.global.exception.BusinessException;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,9 +37,12 @@ public class UpdateTeamUseCaseTest {
 		String description = "프론트엔드 전문 개발팀";
 
 		Team team = new Team("개발팀", "팀이 생성되었습니다.");
+		Member member = Member.of("testUser", "12345678", "test@example.com", "홍길동", UserRole.USER);
+		ReflectionTestUtils.setField(member, "id", 1L);
+		team.addMember(member);
 		ReflectionTestUtils.setField(team, "id", 1L);
 
-		given(teamRepository.findById(anyLong())).willReturn(Optional.of(team));
+		given(teamRepository.findWithTeamMembersById(anyLong())).willReturn(Optional.of(team));
 
 		// when
 		useCase.execute(name, description, 1L);
@@ -50,7 +55,7 @@ public class UpdateTeamUseCaseTest {
 	@Test
 	public void 팀이_존재하지_않는_경우_BusinessException_에러를_던진다() {
 		// given
-		given(teamRepository.findById(anyLong())).willReturn(Optional.empty());
+		given(teamRepository.findWithTeamMembersById(anyLong())).willReturn(Optional.empty());
 
 		// when
 		BusinessException exception = assertThrows(BusinessException.class,
