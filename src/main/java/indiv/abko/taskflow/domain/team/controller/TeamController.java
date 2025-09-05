@@ -12,11 +12,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import indiv.abko.taskflow.domain.team.dto.request.AddTeamMemberRequest;
 import indiv.abko.taskflow.domain.team.dto.request.CreateTeamRequest;
 import indiv.abko.taskflow.domain.team.dto.request.UpdateTeamRequest;
+import indiv.abko.taskflow.domain.team.dto.response.AddTeamMemberResponse;
 import indiv.abko.taskflow.domain.team.dto.response.CreateTeamResponse;
 import indiv.abko.taskflow.domain.team.dto.response.ReadTeamResponse;
 import indiv.abko.taskflow.domain.team.dto.response.UpdateTeamResponse;
+import indiv.abko.taskflow.domain.team.service.AddTeamMemberUseCase;
 import indiv.abko.taskflow.domain.team.service.CreateTeamUseCase;
 import indiv.abko.taskflow.domain.team.service.DeleteTeamUseCase;
 import indiv.abko.taskflow.domain.team.service.ReadTeamUseCase;
@@ -32,6 +35,7 @@ public class TeamController {
 	private final UpdateTeamUseCase updateTeamUseCase;
 	private final DeleteTeamUseCase deleteTeamUseCase;
 	private final ReadTeamUseCase readTeamUseCase;
+	private final AddTeamMemberUseCase addTeamMemberUseCase;
 
 	// 팀 생성
 	@PostMapping("/api/teams")
@@ -77,5 +81,18 @@ public class TeamController {
 		deleteTeamUseCase.execute(teamId);
 
 		return CommonResponse.success("팀이 성공적으로 삭제되었습니다.", null);
+	}
+
+	// 팀 멤버 추가
+	@PostMapping("/api/teams/{teamId}/members")
+	public CommonResponse<AddTeamMemberResponse> createTeamMember(
+		@Valid @RequestBody AddTeamMemberRequest addTeamMemberRequest,
+		@PathVariable Long teamId
+	) {
+		AddTeamMemberResponse addTeamMemberResponse = addTeamMemberUseCase.execute(
+			addTeamMemberRequest.userId(),
+			teamId);
+
+		return CommonResponse.success("멤버가 성공적으로 추가되었습니다.", addTeamMemberResponse);
 	}
 }
