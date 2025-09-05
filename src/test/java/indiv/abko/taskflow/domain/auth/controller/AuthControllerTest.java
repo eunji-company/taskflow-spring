@@ -16,10 +16,14 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import indiv.abko.taskflow.domain.auth.dto.command.LoginCommand;
 import indiv.abko.taskflow.domain.auth.dto.command.RegisterCommand;
+import indiv.abko.taskflow.domain.auth.dto.request.LoginRequest;
 import indiv.abko.taskflow.domain.auth.dto.request.RegisterRequest;
+import indiv.abko.taskflow.domain.auth.dto.response.LoginResponse;
 import indiv.abko.taskflow.domain.auth.dto.response.RegisterResponse;
 import indiv.abko.taskflow.domain.auth.mapper.AuthMapper;
+import indiv.abko.taskflow.domain.auth.service.LoginUseCase;
 import indiv.abko.taskflow.domain.auth.service.RegisterUseCase;
 import indiv.abko.taskflow.support.ControllerTestSupport;
 
@@ -31,6 +35,9 @@ public class AuthControllerTest extends ControllerTestSupport {
 
 	@MockitoBean
 	private AuthMapper authMapper;
+
+	@MockitoBean
+	private LoginUseCase loginUseCase;
 
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -55,9 +62,9 @@ public class AuthControllerTest extends ControllerTestSupport {
 
 			// when & then
 			mockMvc.perform(
-				post(BASE_URL)
-					.contentType(MediaType.APPLICATION_JSON)
-					.content(objectMapper.writeValueAsString(request)))
+					post(BASE_URL)
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(request)))
 				.andExpect(status().isOk());
 		}
 
@@ -68,9 +75,9 @@ public class AuthControllerTest extends ControllerTestSupport {
 
 			// when & then
 			mockMvc.perform(
-				post(BASE_URL)
-					.contentType(MediaType.APPLICATION_JSON)
-					.content(objectMapper.writeValueAsString(request)))
+					post(BASE_URL)
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(request)))
 				.andExpect(status().isBadRequest());
 		}
 
@@ -81,9 +88,9 @@ public class AuthControllerTest extends ControllerTestSupport {
 
 			// when & then
 			mockMvc.perform(
-				post(BASE_URL)
-					.contentType(MediaType.APPLICATION_JSON)
-					.content(objectMapper.writeValueAsString(request)))
+					post(BASE_URL)
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(request)))
 				.andExpect(status().isBadRequest());
 		}
 
@@ -94,9 +101,9 @@ public class AuthControllerTest extends ControllerTestSupport {
 
 			// when & then
 			mockMvc.perform(
-				post(BASE_URL)
-					.contentType(MediaType.APPLICATION_JSON)
-					.content(objectMapper.writeValueAsString(request)))
+					post(BASE_URL)
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(request)))
 				.andExpect(status().isBadRequest());
 		}
 
@@ -107,10 +114,35 @@ public class AuthControllerTest extends ControllerTestSupport {
 
 			// when & then
 			mockMvc.perform(
-				post(BASE_URL)
-					.contentType(MediaType.APPLICATION_JSON)
-					.content(objectMapper.writeValueAsString(request)))
+					post(BASE_URL)
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(request)))
 				.andExpect(status().isBadRequest());
+		}
+	}
+
+	@Nested
+	class Login {
+		private static final String BASE_URL = "/api/auth/login";
+
+		@Test
+		void 로그인에_성공한다() throws Exception {
+			// given
+			LoginRequest request = new LoginRequest("test", "password123!");
+			LoginCommand command = new LoginCommand("test", "password123!");
+			LoginResponse response = new LoginResponse("testAccessToken");
+
+			given(authMapper.toLoginCommand(any(LoginRequest.class))).willReturn(command);
+			given(loginUseCase.execute(command)).willReturn(response);
+
+			// when & then
+			mockMvc.perform(
+					post(BASE_URL)
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(request))
+				)
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.data.token").value("testAccessToken"));
 		}
 	}
 }
