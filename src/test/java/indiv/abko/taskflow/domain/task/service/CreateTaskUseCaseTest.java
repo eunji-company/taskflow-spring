@@ -39,22 +39,20 @@ public class CreateTaskUseCaseTest {
 	void Task_생성_성공() {
 		// given
 		Member member = Member.of(
-				"LoginId",
-				"1234",
-				"gildong@gmail.com",
-				"홍길동",
-				UserRole.ADMIN
-		);
+			"LoginId",
+			"1234",
+			"gildong@gmail.com",
+			"홍길동",
+			UserRole.ADMIN);
 
 		ReflectionTestUtils.setField(member, "id", 1L);
 
 		Task task = new Task(
-				"작업 제목",
-				"작업 내용",
-				LocalDateTime.now().plusDays(7),
-				TaskPriority.MEDIUM,
-				1L
-		);
+			"작업 제목",
+			"작업 내용",
+			LocalDateTime.now().plusDays(7),
+			TaskPriority.MEDIUM,
+			1L);
 
 		ReflectionTestUtils.setField(task, "member", member);
 
@@ -66,22 +64,17 @@ public class CreateTaskUseCaseTest {
 		ReflectionTestUtils.setField(createTaskRequest, "priority", TaskPriority.MEDIUM);
 		ReflectionTestUtils.setField(createTaskRequest, "assigneeId", 1L);
 
-
 		given(memberServiceApi.getByIdOrThrow(anyLong())).willReturn(member);
 		given(taskRepository.save(any())).willReturn(task);
 
 		// when
 		CreateTaskResponse createTaskResponse = createTaskUseCase
-				.execute(new AuthMember(1L, UserRole.ADMIN), createTaskRequest);
+			.execute(new AuthMember(1L), createTaskRequest);
 
 		//then
 		assertThat(createTaskResponse).isNotNull();
 		assertThat(createTaskResponse.title()).isEqualTo("작업 제목");
 
-
-
 	}
-
-
 
 }
