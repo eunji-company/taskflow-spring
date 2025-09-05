@@ -19,11 +19,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import indiv.abko.taskflow.domain.comment.dto.command.DeleteMyCommentCommand;
+import indiv.abko.taskflow.domain.comment.dto.command.WriteCommentToCommentCommand;
 import indiv.abko.taskflow.domain.comment.dto.command.WriteCommentToTaskCommand;
 import indiv.abko.taskflow.domain.comment.dto.request.WriteCommentRequest;
+import indiv.abko.taskflow.domain.comment.dto.response.WriteCommentToCommentResponse;
 import indiv.abko.taskflow.domain.comment.dto.response.WriteCommentToTaskResponse;
 import indiv.abko.taskflow.domain.comment.mapper.CommentMapper;
 import indiv.abko.taskflow.domain.comment.service.DeleteMyCommentUseCase;
+import indiv.abko.taskflow.domain.comment.service.WriteCommentToCommentUseCase;
 import indiv.abko.taskflow.domain.comment.service.WriteCommentToTaskUseCase;
 import indiv.abko.taskflow.domain.user.entity.UserRole;
 import indiv.abko.taskflow.global.auth.AuthMember;
@@ -37,6 +40,9 @@ public class CommentControllerTest extends ControllerTestSupport {
 
 	@MockitoBean
 	private DeleteMyCommentUseCase deleteMyCommentUseCase;
+
+	@MockitoBean
+	private WriteCommentToCommentUseCase writeCommentToCommentUseCase;
 
 	@MockitoBean
 	private CommentMapper commentMapper;
@@ -59,6 +65,26 @@ public class CommentControllerTest extends ControllerTestSupport {
 		given(commentMapper.toWriteCommentToTaskCommand(any(AuthMember.class), anyLong(),
 			any(WriteCommentRequest.class))).willReturn(command);
 		given(writeCommentToTaskUseCase.execute(command)).willReturn(resp);
+
+		// when & then
+		mockMvc.perform(post("/api/tasks/1/comments")
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(objectMapper.writeValueAsString(request)))
+			.andExpect(status().isCreated());
+	}
+
+	@Test
+	@WithMockAuthMember(memberId = 1L)
+	void 대댓글을_작성한다() throws Exception {
+		// given
+		WriteCommentRequest request = new WriteCommentRequest("내용", 1L);
+		WriteCommentToCommentCommand command = new WriteCommentToCommentCommand(1L, 1L, 1L, "내용");
+		WriteCommentToCommentResponse resp = new WriteCommentToCommentResponse(1L, "null", 1L, 1L, null, 1L,
+			Instant.now(), Instant.now());
+
+		given(commentMapper.toWriteCommentToCommentCommand(any(AuthMember.class), anyLong(),
+			any(WriteCommentRequest.class))).willReturn(command);
+		given(writeCommentToCommentUseCase.execute(command)).willReturn(resp);
 
 		// when & then
 		mockMvc.perform(post("/api/tasks/1/comments")
