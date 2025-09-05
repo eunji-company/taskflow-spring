@@ -56,7 +56,16 @@ public class Comment {
 			null,
 			member,
 			task,
-			null
-		);
+			null);
+	}
+
+	public static Comment of(Member member, Comment comment, String content) {
+		return new Comment(
+			null,
+			content,
+			null,
+			member,
+			null,
+			comment);
 	}
 }

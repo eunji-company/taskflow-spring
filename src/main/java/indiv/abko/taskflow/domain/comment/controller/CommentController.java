@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import indiv.abko.taskflow.domain.comment.dto.command.DeleteMyCommentCommand;
+import indiv.abko.taskflow.domain.comment.dto.command.WriteCommentToCommentCommand;
 import indiv.abko.taskflow.domain.comment.dto.command.WriteCommentToTaskCommand;
 import indiv.abko.taskflow.domain.comment.dto.request.WriteCommentRequest;
+import indiv.abko.taskflow.domain.comment.dto.response.WriteCommentToCommentResponse;
 import indiv.abko.taskflow.domain.comment.dto.response.WriteCommentToTaskResponse;
 import indiv.abko.taskflow.domain.comment.mapper.CommentMapper;
 import indiv.abko.taskflow.domain.comment.service.DeleteMyCommentUseCase;
+import indiv.abko.taskflow.domain.comment.service.WriteCommentToCommentUseCase;
 import indiv.abko.taskflow.domain.comment.service.WriteCommentToTaskUseCase;
 import indiv.abko.taskflow.global.auth.AuthMember;
 import indiv.abko.taskflow.global.dto.CommonResponse;
@@ -27,12 +30,13 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api")
 public class CommentController {
 	private final WriteCommentToTaskUseCase writeCommentToTaskUseCase;
+	private final WriteCommentToCommentUseCase writeCommentToCommentUseCase;
 	private final DeleteMyCommentUseCase deleteMyCommentUseCase;
 	private final CommentMapper commentMapper;
 
 	@PostMapping("/tasks/{taskId}/comments")
 	@ResponseStatus(HttpStatus.CREATED)
-	public CommonResponse<WriteCommentToTaskResponse> writeComment(@AuthenticationPrincipal
+	public CommonResponse<?> writeComment(@AuthenticationPrincipal
 	AuthMember authMember,
 		@PathVariable("taskId")
 		long taskId,
@@ -43,7 +47,10 @@ public class CommentController {
 			WriteCommentToTaskResponse result = writeCommentToTaskUseCase.execute(command);
 			return CommonResponse.success("댓글이 생성되었습니다.", result);
 		} else {
-			return null;
+			WriteCommentToCommentCommand command = commentMapper.toWriteCommentToCommentCommand(authMember, taskId,
+				request);
+			WriteCommentToCommentResponse resp = writeCommentToCommentUseCase.execute(command);
+			return CommonResponse.success("대댓글이 생성되었습니다.", resp);
 		}
 	}
 
