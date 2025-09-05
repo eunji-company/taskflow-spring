@@ -10,13 +10,15 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
+import indiv.abko.taskflow.domain.user.entity.UserRole;
+
 public class WithMockAuthMemberSecurityContextFactory implements WithSecurityContextFactory<WithMockAuthMember> {
 	@Override
 	public SecurityContext createSecurityContext(WithMockAuthMember withMockAuthMember) {
 		SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-		AuthMember authMember = new AuthMember(withMockAuthMember.memberId(), withMockAuthMember.userRole());
+		AuthMember authMember = new AuthMember(withMockAuthMember.memberId());
 
-		List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(authMember.userRole().getKey()));
+		List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(UserRole.USER.getKey()));
 		Authentication authentication = new UsernamePasswordAuthenticationToken(authMember, null, authorities);
 
 		securityContext.setAuthentication(authentication);

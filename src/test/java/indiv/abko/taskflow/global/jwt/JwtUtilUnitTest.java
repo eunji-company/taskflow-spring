@@ -39,10 +39,10 @@ class JwtUtilUnitTest {
 	@DisplayName("AuthMember 정보를 담은 액세스 토큰을 생성한다")
 	void createAccessToken() {
 		// given
-		AuthMember authMember = new AuthMember(1L, UserRole.USER);
+		AuthMember authMember = new AuthMember(1L);
 
 		// when
-		String accessToken = jwtUtil.createAccessToken(authMember);
+		String accessToken = jwtUtil.createAccessToken(authMember.memberId(), UserRole.USER);
 
 		// then
 		assertThat(accessToken).isNotNull();
@@ -53,8 +53,8 @@ class JwtUtilUnitTest {
 	@DisplayName("유효한 토큰을 검증하면 true를 반환한다")
 	void validateToken_success() {
 		// given
-		AuthMember authMember = new AuthMember(1L, UserRole.USER);
-		String accessToken = jwtUtil.createAccessToken(authMember);
+		AuthMember authMember = new AuthMember(1L);
+		String accessToken = jwtUtil.createAccessToken(authMember.memberId(), UserRole.USER);
 
 		// when
 		boolean isValid = jwtUtil.validateToken(accessToken);
@@ -67,7 +67,7 @@ class JwtUtilUnitTest {
 	@DisplayName("만료된 토큰을 검증하면 false를 반환한다")
 	void validateToken_expired() {
 		// given
-		AuthMember authMember = new AuthMember(1L, UserRole.USER);
+		AuthMember authMember = new AuthMember(1L);
 		// 유효시간을 음수값으로 주어 만료된 토큰을 생성
 		String accessToken = TestJwtUtil.createAccessToken(authMember, -1, TEST_SECRET_KEY);
 
@@ -82,15 +82,14 @@ class JwtUtilUnitTest {
 	@DisplayName("잘못된 서명을 가진 토큰을 검증하면 false를 반환한다")
 	void validateToken_invalidSignature() {
 		// given
-		AuthMember authMember = new AuthMember(1L, UserRole.USER);
-		String validAccessToken = jwtUtil.createAccessToken(authMember);
+		AuthMember authMember = new AuthMember(1L);
 
 		// when
 		// 유효하지 않은 시크릿 키로 토큰을 다시 생성하여 서명을 조작
 		String invalidSecretKey = "invalidinvalidinvalidinvalidinvalidinvalid";
 		String tamperedToken = Jwts.builder()
 			.setSubject(String.valueOf(authMember.memberId()))
-			.claim("auth", authMember.userRole().name())
+			.claim("auth", UserRole.USER.getKey())
 			.setIssuedAt(new Date())
 			.signWith(Keys.hmacShaKeyFor(invalidSecretKey.getBytes()), SignatureAlgorithm.HS256)
 			.setExpiration(Date.from(Instant.now().plusSeconds(TEST_ACCESS_TOKEN_VALIDITY_SECONDS)))
@@ -108,15 +107,15 @@ class JwtUtilUnitTest {
 		// given
 		long memberId = 1L;
 		UserRole userRole = UserRole.USER;
-		AuthMember authMember = new AuthMember(memberId, userRole);
-		String accessToken = jwtUtil.createAccessToken(authMember);
+		AuthMember authMember = new AuthMember(memberId);
+		String accessToken = jwtUtil.createAccessToken(authMember.memberId(), userRole);
 
 		// when
 		Jwt jwt = jwtUtil.getJwt(accessToken);
 
 		// then
 		assertThat(jwt.getSubject()).isEqualTo(String.valueOf(memberId));
-		assertThat(jwt.getClaimAsString("auth")).isEqualTo(userRole.name());
+		assertThat(jwt.getClaimAsString("auth")).isEqualTo(userRole.getKey());
 		assertDoesNotThrow(jwt::getIssuedAt);
 		assertDoesNotThrow(jwt::getExpiresAt);
 	}
