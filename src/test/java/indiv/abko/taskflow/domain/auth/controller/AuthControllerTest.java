@@ -20,7 +20,6 @@ import indiv.abko.taskflow.domain.auth.dto.command.RegisterCommand;
 import indiv.abko.taskflow.domain.auth.dto.request.RegisterRequest;
 import indiv.abko.taskflow.domain.auth.dto.response.RegisterResponse;
 import indiv.abko.taskflow.domain.auth.mapper.AuthMapper;
-import indiv.abko.taskflow.domain.auth.service.LoginUseCase;
 import indiv.abko.taskflow.domain.auth.service.RegisterUseCase;
 import indiv.abko.taskflow.support.ControllerTestSupport;
 
@@ -29,9 +28,6 @@ public class AuthControllerTest extends ControllerTestSupport {
 
 	@MockitoBean
 	private RegisterUseCase registerUseCase;
-
-	@MockitoBean
-	private LoginUseCase loginUseCase;
 
 	@MockitoBean
 	private AuthMapper authMapper;
@@ -59,10 +55,9 @@ public class AuthControllerTest extends ControllerTestSupport {
 
 			// when & then
 			mockMvc.perform(
-					post(BASE_URL)
-						.contentType(MediaType.APPLICATION_JSON)
-						.content(objectMapper.writeValueAsString(request))
-				)
+				post(BASE_URL)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(objectMapper.writeValueAsString(request)))
 				.andExpect(status().isOk());
 		}
 
@@ -73,10 +68,9 @@ public class AuthControllerTest extends ControllerTestSupport {
 
 			// when & then
 			mockMvc.perform(
-					post(BASE_URL)
-						.contentType(MediaType.APPLICATION_JSON)
-						.content(objectMapper.writeValueAsString(request))
-				)
+				post(BASE_URL)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(objectMapper.writeValueAsString(request)))
 				.andExpect(status().isBadRequest());
 		}
 
@@ -87,10 +81,9 @@ public class AuthControllerTest extends ControllerTestSupport {
 
 			// when & then
 			mockMvc.perform(
-					post(BASE_URL)
-						.contentType(MediaType.APPLICATION_JSON)
-						.content(objectMapper.writeValueAsString(request))
-				)
+				post(BASE_URL)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(objectMapper.writeValueAsString(request)))
 				.andExpect(status().isBadRequest());
 		}
 
@@ -101,10 +94,9 @@ public class AuthControllerTest extends ControllerTestSupport {
 
 			// when & then
 			mockMvc.perform(
-					post(BASE_URL)
-						.contentType(MediaType.APPLICATION_JSON)
-						.content(objectMapper.writeValueAsString(request))
-				)
+				post(BASE_URL)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(objectMapper.writeValueAsString(request)))
 				.andExpect(status().isBadRequest());
 		}
 
@@ -115,10 +107,9 @@ public class AuthControllerTest extends ControllerTestSupport {
 
 			// when & then
 			mockMvc.perform(
-					post(BASE_URL)
-						.contentType(MediaType.APPLICATION_JSON)
-						.content(objectMapper.writeValueAsString(request))
-				)
+				post(BASE_URL)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(objectMapper.writeValueAsString(request)))
 				.andExpect(status().isBadRequest());
 		}
 	}
