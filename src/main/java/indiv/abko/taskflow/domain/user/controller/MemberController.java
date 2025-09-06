@@ -37,10 +37,9 @@ public class MemberController {
 
 	@GetMapping("/available")
 	public CommonResponse<List<MemberInfoResponse>> getAvailableMembers(
-		@RequestParam(required = true, name = "teamId") Long teamId, @AuthenticationPrincipal AuthMember authMember) {
+		@RequestParam(required = true, name = "teamId") Long teamId) {
 		return CommonResponse.success("사용 가능한 사용자 목록을 조회했습니다.",
-			viewAvailableMembersInfoUseCase.execute(teamId, authMember.memberId()));
-
+			viewAvailableMembersInfoUseCase.execute(teamId));
 	}
 
 }
