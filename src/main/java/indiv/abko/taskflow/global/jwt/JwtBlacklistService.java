@@ -17,14 +17,17 @@ public class JwtBlacklistService {
 	private final JwtUtil jwtUtil;
 
 	/**
-	 * 토큰을 블랙리스트에 추가
+	 * 만료되지 않은 토큰을 블랙리스트에 추가합니다.
 	 *
 	 * @param token 블랙리스트에 추가할 JWT
 	 */
 	public void addToBlacklist(String token) {
 		Claims claims = jwtUtil.parseClaims(token);
 		Date expiration = claims.getExpiration();
-		blacklist.put(token, expiration);
+
+		if (expiration.after(new Date())) {
+			blacklist.put(token, expiration);
+		}
 	}
 
 	/**
