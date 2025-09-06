@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,6 +34,8 @@ public class CreateTeamUseCaseTest {
 		String description = "";
 
 		Team team = new Team(name, description);
+
+		ReflectionTestUtils.setField(team, "createdAt", LocalDateTime.now());
 		ReflectionTestUtils.setField(team, "id", 1L);
 
 		given(teamRepository.existsByName(anyString())).willReturn(false);
@@ -52,6 +56,8 @@ public class CreateTeamUseCaseTest {
 		String description = "";
 
 		Team team = new Team(name, description);
+
+		ReflectionTestUtils.setField(team, "createdAt", LocalDateTime.now());
 		ReflectionTestUtils.setField(team, "id", 1L);
 
 		given(teamRepository.existsByName(anyString())).willReturn(true);

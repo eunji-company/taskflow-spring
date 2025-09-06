@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,8 @@ public class DeleteTeamUseCaseTest {
 	public void 팀이_존재하는_경우_팀을_제거할_수_있다() {
 		// given
 		Team team = new Team("개발팀", "팀이 생성되었습니다.");
+
+		ReflectionTestUtils.setField(team, "createdAt", LocalDateTime.now());
 		ReflectionTestUtils.setField(team, "id", 1L);
 
 		given(teamRepository.findById(anyLong())).willReturn(Optional.of(team));

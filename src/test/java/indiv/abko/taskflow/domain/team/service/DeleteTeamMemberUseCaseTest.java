@@ -3,6 +3,7 @@ package indiv.abko.taskflow.domain.team.service;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -39,9 +40,13 @@ public class DeleteTeamMemberUseCaseTest {
 	public void 팀_멤버를_삭제할_수_있다() {
 		// given
 		Member member = Member.of("testUser", "12345678", "test@example.com", "홍길동", UserRole.USER);
+
+		ReflectionTestUtils.setField(member, "createdAt", LocalDateTime.now());
 		ReflectionTestUtils.setField(member, "id", 1L);
 
 		Team team = new Team("개발팀", "");
+
+		ReflectionTestUtils.setField(team, "createdAt", LocalDateTime.now());
 		ReflectionTestUtils.setField(team, "id", 1L);
 
 		team.addMember(member);

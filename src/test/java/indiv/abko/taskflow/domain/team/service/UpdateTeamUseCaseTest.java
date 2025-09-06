@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -35,11 +36,17 @@ public class UpdateTeamUseCaseTest {
 		String name = "프론트엔드팀";
 		String description = "프론트엔드 전문 개발팀";
 
-		Team team = new Team("개발팀", "팀이 생성되었습니다.");
 		Member member = Member.of("testUser", "12345678", "test@example.com", "홍길동", UserRole.USER);
+
+		ReflectionTestUtils.setField(member, "createdAt", LocalDateTime.now());
 		ReflectionTestUtils.setField(member, "id", 1L);
-		team.addMember(member);
+
+		Team team = new Team("개발팀", "팀이 생성되었습니다.");
+
+		ReflectionTestUtils.setField(team, "createdAt", LocalDateTime.now());
 		ReflectionTestUtils.setField(team, "id", 1L);
+
+		team.addMember(member);
 
 		given(teamRepository.findWithTeamMembersById(anyLong())).willReturn(Optional.of(team));
 
