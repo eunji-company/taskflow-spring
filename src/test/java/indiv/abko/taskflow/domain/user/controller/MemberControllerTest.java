@@ -4,6 +4,7 @@ import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
@@ -22,6 +23,7 @@ import indiv.abko.taskflow.domain.user.service.ViewAvailableMembersInfoUseCase;
 import indiv.abko.taskflow.domain.user.service.ViewMemberInfoUseCase;
 import indiv.abko.taskflow.domain.user.service.ViewMembersInfoUseCase;
 import indiv.abko.taskflow.global.auth.WithMockAuthMember;
+import indiv.abko.taskflow.global.dto.DtoConstants;
 
 @WebMvcTest(controllers = MemberController.class)
 public class MemberControllerTest {
@@ -44,9 +46,10 @@ public class MemberControllerTest {
 		//given
 		Long memberId = 1L;
 		Member member = Member.of("testusername", "HASHED_PW", "test@example.com", "testname", UserRole.USER);
+		ReflectionTestUtils.setField(member, "createdAt", LocalDateTime.now());
 
 		var dto = new MemberInfoResponse(member.getId(), member.getUsername(), member.getEmail(), member.getName(),
-			member.getUserRole().name(), member.getCreatedAt());
+			member.getUserRole().name(), member.getCreatedAt().toInstant(DtoConstants.REAL_TIME_ZONE_OFFSET));
 
 		given(viewMemberInfoUseCase.execute(memberId)).willReturn(dto);
 

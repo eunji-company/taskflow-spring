@@ -9,6 +9,7 @@ import indiv.abko.taskflow.domain.team.entity.Team;
 import indiv.abko.taskflow.domain.team.service.TeamServiceApi;
 import indiv.abko.taskflow.domain.user.dto.MemberInfoResponse;
 import indiv.abko.taskflow.domain.user.repository.MemberRepository;
+import indiv.abko.taskflow.global.dto.DtoConstants;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -24,7 +25,7 @@ public class ViewAvailableMembersInfoUseCase {
 		return memberRepository.findAvailableMembersForTeam(team)
 			.stream()
 			.map(m -> new MemberInfoResponse(m.getId(), m.getUsername(), m.getEmail(),
-				m.getName(), m.getUserRole().name(), m.getCreatedAt()))
+				m.getName(), m.getUserRole().name(), m.getCreatedAt().toInstant(DtoConstants.REAL_TIME_ZONE_OFFSET)))
 			.toList();
 	}
 }
