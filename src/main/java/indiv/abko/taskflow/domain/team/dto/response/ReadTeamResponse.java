@@ -8,7 +8,8 @@ public record ReadTeamResponse(
 	String name,
 	String description,
 	LocalDateTime createdAt,
-	List<UserResp> members) {
+	List<UserResp> members
+) {
 	public record UserResp(
 		long id,
 		String username,
