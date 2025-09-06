@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class JwtUtil {
 
+	public static final String BEARER_PREFIX = "Bearer ";
 	private static final String AUTHORITIES_KEY = "auth";
 	private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 	@Value("${jwt.secret}")
@@ -85,12 +86,17 @@ public class JwtUtil {
 			.build();
 	}
 
-	private Claims parseClaims(String token) {
-		return Jwts.parserBuilder()
-			.setSigningKey(key)
-			.build()
-			.parseClaimsJws(token)
-			.getBody();
+	public Claims parseClaims(String token) {
+		try {
+			return Jwts.parserBuilder()
+				.setSigningKey(key)
+				.build()
+				.parseClaimsJws(token)
+				.getBody();
+		} catch (ExpiredJwtException e) {
+			// 만료된 토큰의 경우에도 블랙리스트에 추가하기 위해 Claims를 반환
+			return e.getClaims();
+		}
 	}
 
 }

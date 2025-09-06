@@ -2,6 +2,7 @@ package indiv.abko.taskflow.domain.user.entity;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import indiv.abko.taskflow.global.entity.BaseTimeEntity;
@@ -24,6 +25,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLRestriction("deleted_at IS NULL")
+@SQLDelete(sql = "UPDATE members SET deleted_at = NOW() WHERE id = ?")
 public class Member extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
