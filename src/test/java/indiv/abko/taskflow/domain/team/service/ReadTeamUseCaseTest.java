@@ -14,14 +14,14 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import indiv.abko.taskflow.domain.team.dto.response.ReadTeamResponse;
 import indiv.abko.taskflow.domain.team.entity.Team;
-import indiv.abko.taskflow.domain.team.repository.TeamMemberRepository;
+import indiv.abko.taskflow.domain.team.repository.TeamRepository;
 import indiv.abko.taskflow.domain.user.entity.Member;
 import indiv.abko.taskflow.domain.user.entity.UserRole;
 
 @ExtendWith(MockitoExtension.class)
 public class ReadTeamUseCaseTest {
 	@Mock
-	private TeamMemberRepository teamMemberRepository;
+	private TeamRepository teamRepository;
 
 	@InjectMocks
 	private ReadTeamUseCase useCase;
@@ -37,7 +37,7 @@ public class ReadTeamUseCaseTest {
 		ReflectionTestUtils.setField(team, "id", 1L);
 		team.addMember(member);
 
-		when(teamMemberRepository.findAllWithFetchBy()).thenReturn(team.getTeamMembers());
+		when(teamRepository.findWithDetailBy()).thenReturn(List.of(team));
 
 		// when
 		List<ReadTeamResponse> responses = useCase.execute();
