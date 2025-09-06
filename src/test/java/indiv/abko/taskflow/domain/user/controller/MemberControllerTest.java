@@ -24,9 +24,10 @@ import indiv.abko.taskflow.domain.user.service.ViewMemberInfoUseCase;
 import indiv.abko.taskflow.domain.user.service.ViewMembersInfoUseCase;
 import indiv.abko.taskflow.global.auth.WithMockAuthMember;
 import indiv.abko.taskflow.global.dto.DtoConstants;
+import indiv.abko.taskflow.support.ControllerTestSupport;
 
 @WebMvcTest(controllers = MemberController.class)
-public class MemberControllerTest {
+public class MemberControllerTest extends ControllerTestSupport {
 	@Autowired
 	MockMvc mockMvc;
 

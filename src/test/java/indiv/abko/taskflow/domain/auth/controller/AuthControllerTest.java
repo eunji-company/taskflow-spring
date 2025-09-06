@@ -18,13 +18,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import indiv.abko.taskflow.domain.auth.dto.command.LoginCommand;
 import indiv.abko.taskflow.domain.auth.dto.command.RegisterCommand;
+import indiv.abko.taskflow.domain.auth.dto.command.WithdrawCommand;
 import indiv.abko.taskflow.domain.auth.dto.request.LoginRequest;
 import indiv.abko.taskflow.domain.auth.dto.request.RegisterRequest;
+import indiv.abko.taskflow.domain.auth.dto.request.WithdrawRequest;
 import indiv.abko.taskflow.domain.auth.dto.response.LoginResponse;
 import indiv.abko.taskflow.domain.auth.dto.response.RegisterResponse;
 import indiv.abko.taskflow.domain.auth.mapper.AuthMapper;
 import indiv.abko.taskflow.domain.auth.service.LoginUseCase;
 import indiv.abko.taskflow.domain.auth.service.RegisterUseCase;
+import indiv.abko.taskflow.domain.auth.service.WithdrawUseCase;
+import indiv.abko.taskflow.global.auth.AuthMember;
+import indiv.abko.taskflow.global.jwt.JwtAuthenticationToken;
 import indiv.abko.taskflow.support.ControllerTestSupport;
 
 @WebMvcTest(AuthController.class)
@@ -38,6 +43,9 @@ public class AuthControllerTest extends ControllerTestSupport {
 
 	@MockitoBean
 	private LoginUseCase loginUseCase;
+
+	@MockitoBean
+	private WithdrawUseCase withdrawUseCase;
 
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -145,4 +153,36 @@ public class AuthControllerTest extends ControllerTestSupport {
 				.andExpect(jsonPath("$.data.token").value("testAccessToken"));
 		}
 	}
+
+	@Nested
+	class Withdraw {
+		private static final String BASE_URL = "/api/auth/withdraw";
+
+		@Test
+		void 회원탈퇴에_성공한다() throws Exception {
+			// given
+			WithdrawRequest request = new WithdrawRequest("password123!");
+			WithdrawCommand command = new WithdrawCommand(1L, "password123!", "testAccessToken");
+
+			given(authMapper.toWithdrawCommand(any(AuthMember.class), any(WithdrawRequest.class), anyString()))
+				.willReturn(command);
+			willDoNothing().given(withdrawUseCase).execute(command);
+
+			given(jwtUtil.validateToken(anyString())).willReturn(true);
+
+			AuthMember authMember = new AuthMember(1L);
+			JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(authMember, null, null);
+			given(jwtAuthenticationConverter.convert(any())).willReturn(authenticationToken);
+
+			// when & then
+			mockMvc.perform(
+					post(BASE_URL)
+						.header("Authorization", "Bearer testAccessToken")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(request)))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.message").value("회원탈퇴가 완료되었습니다."));
+		}
+	}
+
 }
