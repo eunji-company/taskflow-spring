@@ -10,6 +10,7 @@ import indiv.abko.taskflow.domain.user.entity.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -39,14 +40,14 @@ public class Comment {
 	@Column(updatable = false)
 	private LocalDateTime createdAt;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false)
 	private Member member;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Task task;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Comment parentComment;
 
 	public static Comment of(Member member, Task task, String content) {
