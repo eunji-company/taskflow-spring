@@ -43,11 +43,17 @@ public class Team extends BaseTimeEntity {
 		this.description = description;
 	}
 
-	// 헬퍼 메서드
+	// 헬퍼 메서드 (팀 멤버 추가)
 	public void addMember(Member member) {
 		TeamMemberId id = new TeamMemberId(this, member);
 		TeamMember teamMember = new TeamMember(id);
 		this.teamMembers.add(teamMember);
+	}
+
+	// 헬퍼 메서드 (팀 멤버 제거)
+	public void deleteMember(Member member) {
+		this.teamMembers.removeIf(
+			teamMember -> teamMember.getId().getMember().getId().equals(member.getId()));
 	}
 
 	public void update(String name, String description) {
