@@ -94,7 +94,7 @@ public class JwtUtil {
 				.parseClaimsJws(token)
 				.getBody();
 		} catch (ExpiredJwtException e) {
-			// 만료된 토큰의 경우에도 블랙리스트에 추가하기 위해 Claims를 반환
+			// 만료된 토큰의 경우에도 호출 측에서 후속 처리할 수 있도록 Claims를 반환
 			return e.getClaims();
 		}
 	}
