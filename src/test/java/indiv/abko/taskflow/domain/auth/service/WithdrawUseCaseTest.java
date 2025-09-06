@@ -16,8 +16,8 @@ import indiv.abko.taskflow.domain.user.entity.Member;
 import indiv.abko.taskflow.domain.user.entity.UserRole;
 import indiv.abko.taskflow.domain.user.exception.MemberErrorCode;
 import indiv.abko.taskflow.domain.user.service.MemberServiceApi;
+import indiv.abko.taskflow.global.auth.JwtBlacklist;
 import indiv.abko.taskflow.global.exception.BusinessException;
-import indiv.abko.taskflow.global.jwt.JwtBlacklistService;
 
 @ExtendWith(MockitoExtension.class)
 class WithdrawUseCaseTest {
@@ -29,7 +29,7 @@ class WithdrawUseCaseTest {
 	private PasswordEncoder passwordEncoder;
 
 	@Mock
-	private JwtBlacklistService jwtBlacklistService;
+	private JwtBlacklist jwtBlacklist;
 
 	@InjectMocks
 	private WithdrawUseCase withdrawUseCase;
@@ -42,7 +42,7 @@ class WithdrawUseCaseTest {
 
 		given(memberService.getByIdOrThrow(command.memberId())).willReturn(member);
 		given(passwordEncoder.matches(command.password(), member.getPassword())).willReturn(true);
-		willDoNothing().given(jwtBlacklistService).addToBlacklist(command.token());
+		willDoNothing().given(jwtBlacklist).addToBlacklist(command.token());
 		willDoNothing().given(memberService).withdraw(member);
 
 		// when
@@ -51,7 +51,7 @@ class WithdrawUseCaseTest {
 		// then
 		then(memberService).should().getByIdOrThrow(command.memberId());
 		then(passwordEncoder).should().matches(command.password(), member.getPassword());
-		then(jwtBlacklistService).should().addToBlacklist(command.token());
+		then(jwtBlacklist).should().addToBlacklist(command.token());
 		then(memberService).should().withdraw(member);
 	}
 
@@ -69,7 +69,7 @@ class WithdrawUseCaseTest {
 
 		then(memberService).should().getByIdOrThrow(command.memberId());
 		then(passwordEncoder).should(never()).matches(anyString(), anyString());
-		then(jwtBlacklistService).should(never()).addToBlacklist(anyString());
+		then(jwtBlacklist).should(never()).addToBlacklist(anyString());
 		then(memberService).should(never()).withdraw(any(Member.class));
 	}
 
@@ -89,7 +89,7 @@ class WithdrawUseCaseTest {
 
 		then(memberService).should().getByIdOrThrow(command.memberId());
 		then(passwordEncoder).should().matches(command.password(), member.getPassword());
-		then(jwtBlacklistService).should(never()).addToBlacklist(anyString());
+		then(jwtBlacklist).should(never()).addToBlacklist(anyString());
 		then(memberService).should(never()).withdraw(any(Member.class));
 	}
 }

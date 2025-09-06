@@ -4,9 +4,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import indiv.abko.taskflow.global.auth.CustomAuthenticationEntryPoint;
+import indiv.abko.taskflow.global.auth.JwtBlacklist;
 import indiv.abko.taskflow.global.config.SecurityConfig;
 import indiv.abko.taskflow.global.jwt.JwtAuthenticationConverter;
-import indiv.abko.taskflow.global.jwt.JwtBlacklistService;
 import indiv.abko.taskflow.global.jwt.JwtUtil;
 
 @Import(SecurityConfig.class)
@@ -22,5 +22,5 @@ public abstract class ControllerTestSupport {
 	protected CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
 	@MockitoBean
-	protected JwtBlacklistService jwtBlacklistService;
+	protected JwtBlacklist jwtBlacklist;
 }
