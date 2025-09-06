@@ -3,6 +3,7 @@ package indiv.abko.taskflow.domain.user.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import indiv.abko.taskflow.domain.user.dto.MemberInfoResponse;
 import indiv.abko.taskflow.domain.user.entity.Member;
@@ -33,6 +35,7 @@ public class ViewMemberInfoUseCaseTest {
 		//given
 		Long memberId = 1L;
 		Member member = Member.of("testusername", "HASHED_PW", "test@example.com", "testname", UserRole.USER);
+		ReflectionTestUtils.setField(member, "createdAt", LocalDateTime.now());
 		given(memberRepository.findById(memberId)).willReturn(Optional.of(member));
 
 		//when

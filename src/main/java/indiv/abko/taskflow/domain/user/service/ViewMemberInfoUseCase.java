@@ -7,6 +7,7 @@ import indiv.abko.taskflow.domain.user.dto.MemberInfoResponse;
 import indiv.abko.taskflow.domain.user.entity.Member;
 import indiv.abko.taskflow.domain.user.exception.MemberErrorCode;
 import indiv.abko.taskflow.domain.user.repository.MemberRepository;
+import indiv.abko.taskflow.global.dto.DtoConstants;
 import indiv.abko.taskflow.global.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 
@@ -20,6 +21,6 @@ public class ViewMemberInfoUseCase {
 		Member member = memberRepository.findById(memberId)
 			.orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
 		return new MemberInfoResponse(member.getId(), member.getUsername(), member.getEmail(), member.getName(),
-			member.getUserRole().name(), member.getCreatedAt());
+			member.getUserRole().name(), member.getCreatedAt().toInstant(DtoConstants.REAL_TIME_ZONE_OFFSET));
 	}
 }
