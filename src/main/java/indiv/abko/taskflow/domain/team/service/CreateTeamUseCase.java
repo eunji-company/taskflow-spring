@@ -27,13 +27,13 @@ public class CreateTeamUseCase {
 
 		Team team = new Team(name, description);
 
-		teamRepository.save(team);
+		Team savedTeam = teamRepository.save(team);
 
 		return new CreateTeamResponse(
-			team.getId(),
-			team.getName(),
-			team.getDescription(),
-			team.getCreatedAt().toInstant(DtoConstants.REAL_TIME_ZONE_OFFSET),
+			savedTeam.getId(),
+			savedTeam.getName(),
+			savedTeam.getDescription(),
+			savedTeam.getCreatedAt().toInstant(DtoConstants.REAL_TIME_ZONE_OFFSET),
 			new ArrayList<>());
 	}
 }

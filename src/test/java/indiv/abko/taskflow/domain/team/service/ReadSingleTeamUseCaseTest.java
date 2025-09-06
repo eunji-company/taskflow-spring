@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,8 @@ public class ReadSingleTeamUseCaseTest {
 	public void 특정_팀_조회에_성공한다() {
 		// given
 		Team team = new Team("Dev Team", "개발팀");
+
+		ReflectionTestUtils.setField(team, "createdAt", LocalDateTime.now());
 		ReflectionTestUtils.setField(team, "id", 1L);
 
 		given(teamRepository.findWithTeamMembersById(anyLong())).willReturn(Optional.of(team));

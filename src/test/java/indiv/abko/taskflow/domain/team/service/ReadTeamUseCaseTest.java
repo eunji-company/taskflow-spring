@@ -3,6 +3,7 @@ package indiv.abko.taskflow.domain.team.service;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -30,11 +31,16 @@ public class ReadTeamUseCaseTest {
 	void 팀_목록_조회를_성공한다() {
 		// given
 		Member member = Member.of("testUser", "12345678", "test@example.com", "홍길동", UserRole.USER);
+
+		ReflectionTestUtils.setField(member, "createdAt", LocalDateTime.now());
 		ReflectionTestUtils.setField(member, "id", 1L);
 
 		// 테스트용 Team 생성
-		Team team = new Team("Dev Team", "개발팀"); // ArrayList로 바꾸기 (가변)
+		Team team = new Team("Dev Team", "개발팀");
+
+		ReflectionTestUtils.setField(team, "createdAt", LocalDateTime.now());
 		ReflectionTestUtils.setField(team, "id", 1L);
+
 		team.addMember(member);
 
 		when(teamRepository.findWithDetailBy()).thenReturn(List.of(team));
