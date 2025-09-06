@@ -18,12 +18,14 @@ import indiv.abko.taskflow.domain.team.dto.request.UpdateTeamRequest;
 import indiv.abko.taskflow.domain.team.dto.response.AddTeamMemberResponse;
 import indiv.abko.taskflow.domain.team.dto.response.CreateTeamResponse;
 import indiv.abko.taskflow.domain.team.dto.response.DeleteTeamMemberResponse;
+import indiv.abko.taskflow.domain.team.dto.response.ReadSingleTeamResponse;
 import indiv.abko.taskflow.domain.team.dto.response.ReadTeamResponse;
 import indiv.abko.taskflow.domain.team.dto.response.UpdateTeamResponse;
 import indiv.abko.taskflow.domain.team.service.AddTeamMemberUseCase;
 import indiv.abko.taskflow.domain.team.service.CreateTeamUseCase;
 import indiv.abko.taskflow.domain.team.service.DeleteTeamMemberUseCase;
 import indiv.abko.taskflow.domain.team.service.DeleteTeamUseCase;
+import indiv.abko.taskflow.domain.team.service.ReadSingleTeamUseCase;
 import indiv.abko.taskflow.domain.team.service.ReadTeamUseCase;
 import indiv.abko.taskflow.domain.team.service.UpdateTeamUseCase;
 import indiv.abko.taskflow.global.dto.CommonResponse;
@@ -35,6 +37,7 @@ import lombok.RequiredArgsConstructor;
 public class TeamController {
 	private final CreateTeamUseCase createTeamUseCase;
 	private final ReadTeamUseCase readTeamUseCase;
+	private final ReadSingleTeamUseCase readSingleTeamUseCase;
 	private final UpdateTeamUseCase updateTeamUseCase;
 	private final DeleteTeamUseCase deleteTeamUseCase;
 
@@ -61,6 +64,16 @@ public class TeamController {
 		List<ReadTeamResponse> readTeamResponses = readTeamUseCase.execute();
 
 		return CommonResponse.success("팀 목록을 조회했습니다.", readTeamResponses);
+	}
+
+	// 특정 팀 조회
+	@GetMapping("/api/teams/{teamId}")
+	public CommonResponse<ReadSingleTeamResponse> getTeam(
+		@PathVariable Long teamId
+	) {
+		ReadSingleTeamResponse readSingleTeamResponse = readSingleTeamUseCase.execute(teamId);
+
+		return CommonResponse.success("팀 정보를 조회했습니다.", readSingleTeamResponse);
 	}
 
 	// 팀 수정
