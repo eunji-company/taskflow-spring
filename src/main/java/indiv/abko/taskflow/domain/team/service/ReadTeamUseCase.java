@@ -11,6 +11,7 @@ import indiv.abko.taskflow.domain.team.entity.Team;
 import indiv.abko.taskflow.domain.team.entity.TeamMember;
 import indiv.abko.taskflow.domain.team.entity.TeamMemberId;
 import indiv.abko.taskflow.domain.team.repository.TeamRepository;
+import indiv.abko.taskflow.global.dto.DtoConstants;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -35,13 +36,13 @@ public class ReadTeamUseCase {
 						member.getName(),
 						member.getEmail(),
 						member.getUserRole().name(),
-						member.getCreatedAt());
+						member.getCreatedAt().toInstant(DtoConstants.REAL_TIME_ZONE_OFFSET));
 				})
 				.toList();
 
 			responses.add(new ReadTeamResponse(team.getId(), team.getName(),
 				team.getDescription(),
-				team.getCreatedAt(),
+				team.getCreatedAt().toInstant(DtoConstants.REAL_TIME_ZONE_OFFSET),
 				members));
 		}
 

@@ -14,6 +14,7 @@ import indiv.abko.taskflow.domain.team.repository.TeamMemberRepository;
 import indiv.abko.taskflow.domain.team.repository.TeamRepository;
 import indiv.abko.taskflow.domain.user.entity.Member;
 import indiv.abko.taskflow.domain.user.service.MemberServiceApi;
+import indiv.abko.taskflow.global.dto.DtoConstants;
 import indiv.abko.taskflow.global.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 
@@ -52,14 +53,14 @@ public class AddTeamMemberUseCase {
 				member1.getName(),
 				member1.getEmail(),
 				member1.getUserRole().name(),
-				member1.getCreatedAt()))
+				member1.getCreatedAt().toInstant(DtoConstants.REAL_TIME_ZONE_OFFSET)))
 			.collect(Collectors.toList());
 
 		return new AddTeamMemberResponse(
 			team.getId(),
 			team.getName(),
 			team.getDescription(),
-			team.getCreatedAt(),
+			team.getCreatedAt().toInstant(DtoConstants.REAL_TIME_ZONE_OFFSET),
 			resps);
 	}
 }
