@@ -34,24 +34,23 @@ public class HierarchicalCommentsPaginator {
             if (paginationContext.isInRange()) {
                 pagedComments.add(parent);
                 paginationContext.next();
+            } else {
+                paginationContext.next();
+            }
+
+            if (paginationContext.shouldStop()) {
+                return pagedComments;
+            }
+
+            List<Comment> childComments = getChildComments(parent);
+            for (Comment child : childComments) {
+                if (paginationContext.isInRange()) {
+                    pagedComments.add(child);
+                }
+                paginationContext.next();
 
                 if (paginationContext.shouldStop()) {
                     return pagedComments;
-                }
-
-                List<Comment> childComments = getChildComments(parent);
-                for (Comment child : childComments) {
-                    pagedComments.add(child);
-                    paginationContext.next();
-
-                    if (paginationContext.shouldStop()) {
-                        return pagedComments;
-                    }
-                }
-            } else {
-                paginationContext.next();
-                if (paginationContext.shouldStop()) {
-                    break;
                 }
             }
         }
