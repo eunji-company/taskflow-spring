@@ -14,6 +14,5 @@ public interface MemberServiceApi {
 
 	boolean existsByEmail(String email);
 
-	// TODO: 혜준님을 위한 선물
 	Optional<Member> findByUsername(String username);
 }

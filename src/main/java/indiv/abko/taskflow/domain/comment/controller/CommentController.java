@@ -1,12 +1,15 @@
 package indiv.abko.taskflow.domain.comment.controller;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,10 +17,13 @@ import indiv.abko.taskflow.domain.comment.dto.command.DeleteMyCommentCommand;
 import indiv.abko.taskflow.domain.comment.dto.command.WriteCommentToCommentCommand;
 import indiv.abko.taskflow.domain.comment.dto.command.WriteCommentToTaskCommand;
 import indiv.abko.taskflow.domain.comment.dto.request.WriteCommentRequest;
+import indiv.abko.taskflow.domain.comment.dto.response.ViewCommentsFromTaskResponse;
 import indiv.abko.taskflow.domain.comment.dto.response.WriteCommentToCommentResponse;
 import indiv.abko.taskflow.domain.comment.dto.response.WriteCommentToTaskResponse;
 import indiv.abko.taskflow.domain.comment.mapper.CommentMapper;
+import indiv.abko.taskflow.domain.comment.dto.command.ViewCommentsFromTaskCommand;
 import indiv.abko.taskflow.domain.comment.service.DeleteMyCommentUseCase;
+import indiv.abko.taskflow.domain.comment.service.ViewCommentsFromTaskUseCase;
 import indiv.abko.taskflow.domain.comment.service.WriteCommentToCommentUseCase;
 import indiv.abko.taskflow.domain.comment.service.WriteCommentToTaskUseCase;
 import indiv.abko.taskflow.global.auth.AuthMember;
@@ -32,6 +38,7 @@ public class CommentController {
 	private final WriteCommentToTaskUseCase writeCommentToTaskUseCase;
 	private final WriteCommentToCommentUseCase writeCommentToCommentUseCase;
 	private final DeleteMyCommentUseCase deleteMyCommentUseCase;
+	private final ViewCommentsFromTaskUseCase viewCommentsFromTaskUseCase;
 	private final CommentMapper commentMapper;
 
 	@PostMapping("/tasks/{taskId}/comments")
@@ -66,4 +73,18 @@ public class CommentController {
 		return CommonResponse.success("댓글이 삭제되었습니다.", null);
 	}
 
+	@GetMapping("/tasks/{taskId}/comments")
+	public CommonResponse<?> viewCommentsFromTask(@PathVariable("taskId")
+	long taskId,
+		@RequestParam(value = "page", defaultValue = "0")
+		int page,
+		@RequestParam(value = "size", defaultValue = "10")
+		int size,
+		@RequestParam(value = "sort", defaultValue = "newest")
+		String sort) {
+		Pageable pageable = Pageable.ofSize(size).withPage(page);
+		ViewCommentsFromTaskCommand command = commentMapper.toViewCommentsFromTaskCommand(pageable, taskId, sort);
+		ViewCommentsFromTaskResponse result = viewCommentsFromTaskUseCase.execute(command);
+		return CommonResponse.success("댓글 목록을 조회했습니다.", result);
+	}
 }

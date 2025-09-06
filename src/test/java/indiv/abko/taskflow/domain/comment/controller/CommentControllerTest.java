@@ -8,10 +8,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.time.Instant;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -19,13 +21,17 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import indiv.abko.taskflow.domain.comment.dto.command.DeleteMyCommentCommand;
+import indiv.abko.taskflow.domain.comment.dto.command.ViewCommentsFromTaskCommand;
 import indiv.abko.taskflow.domain.comment.dto.command.WriteCommentToCommentCommand;
 import indiv.abko.taskflow.domain.comment.dto.command.WriteCommentToTaskCommand;
 import indiv.abko.taskflow.domain.comment.dto.request.WriteCommentRequest;
+import indiv.abko.taskflow.domain.comment.dto.response.ViewCommentsFromTaskResponse;
 import indiv.abko.taskflow.domain.comment.dto.response.WriteCommentToCommentResponse;
 import indiv.abko.taskflow.domain.comment.dto.response.WriteCommentToTaskResponse;
+import indiv.abko.taskflow.domain.comment.enums.CommentSortOption;
 import indiv.abko.taskflow.domain.comment.mapper.CommentMapper;
 import indiv.abko.taskflow.domain.comment.service.DeleteMyCommentUseCase;
+import indiv.abko.taskflow.domain.comment.service.ViewCommentsFromTaskUseCase;
 import indiv.abko.taskflow.domain.comment.service.WriteCommentToCommentUseCase;
 import indiv.abko.taskflow.domain.comment.service.WriteCommentToTaskUseCase;
 import indiv.abko.taskflow.domain.user.entity.UserRole;
@@ -40,6 +46,9 @@ public class CommentControllerTest extends ControllerTestSupport {
 
 	@MockitoBean
 	private DeleteMyCommentUseCase deleteMyCommentUseCase;
+
+	@MockitoBean
+	private ViewCommentsFromTaskUseCase viewCommentsFromTaskUseCase;
 
 	@MockitoBean
 	private WriteCommentToCommentUseCase writeCommentToCommentUseCase;
@@ -106,5 +115,29 @@ public class CommentControllerTest extends ControllerTestSupport {
 		mockMvc.perform(delete("/api/tasks/1/comments/1"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.message").value("댓글이 삭제되었습니다."));
+	}
+
+	@Test
+	@WithMockAuthMember(memberId = 1L, userRole = UserRole.USER)
+	void taskId로_댓글_목록을_조회한다() throws Exception {
+		// given
+		ViewCommentsFromTaskCommand command = new ViewCommentsFromTaskCommand(
+			Pageable.ofSize(10).withPage(0), 1L, CommentSortOption.NEWEST);
+		ViewCommentsFromTaskResponse resp = ViewCommentsFromTaskResponse.builder()
+			.content(List.of())
+			.totalElements(0)
+			.totalPages(0)
+			.size(10)
+			.number(0)
+			.build();
+
+		given(commentMapper.toViewCommentsFromTaskCommand(any(Pageable.class), eq(1L), anyString()))
+			.willReturn(command);
+		given(viewCommentsFromTaskUseCase.execute(command)).willReturn(resp);
+
+		// when & then
+		mockMvc.perform(get("/api/tasks/1/comments?page=0&size=10&sort=newest"))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.success").value(true));
 	}
 }
