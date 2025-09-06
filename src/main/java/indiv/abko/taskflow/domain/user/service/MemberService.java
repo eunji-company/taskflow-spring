@@ -1,5 +1,7 @@
 package indiv.abko.taskflow.domain.user.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +21,7 @@ public class MemberService implements MemberServiceApi {
 	@Transactional(readOnly = true)
 	public Member getByIdOrThrow(long memberId) {
 		return memberRepository.findById(memberId)
-			.orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
+				.orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
 	}
 
 	@Override
@@ -39,5 +41,10 @@ public class MemberService implements MemberServiceApi {
 	@Transactional(readOnly = true)
 	public boolean existsByEmail(String email) {
 		return memberRepository.existsByEmail(email);
+	}
+
+	@Override
+	public Optional<Member> findByUsername(String username) {
+		return memberRepository.findByUsername(username);
 	}
 }
