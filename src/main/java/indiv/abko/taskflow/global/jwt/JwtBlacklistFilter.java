@@ -10,6 +10,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import indiv.abko.taskflow.domain.auth.exception.AuthErrorCode;
+import indiv.abko.taskflow.global.auth.JwtBlacklist;
 import indiv.abko.taskflow.global.dto.CommonResponse;
 import indiv.abko.taskflow.global.exception.ErrorCode;
 import jakarta.servlet.FilterChain;
@@ -22,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtBlacklistFilter extends OncePerRequestFilter {
 
-	private final JwtBlacklistService jwtBlacklistService;
+	private final JwtBlacklist jwtBlacklist;
 	private final ObjectMapper objectMapper;
 
 	@Override
@@ -34,7 +35,7 @@ public class JwtBlacklistFilter extends OncePerRequestFilter {
 
 		String token = resolveToken(request);
 
-		if (StringUtils.hasText(token) && jwtBlacklistService.isBlacklisted(token)) {
+		if (StringUtils.hasText(token) && jwtBlacklist.isBlacklisted(token)) {
 			sendErrorResponse(response, AuthErrorCode.INVALID_TOKEN);
 			return; // 필터 체인 중단
 		}
