@@ -45,6 +45,7 @@ public class AddTeamMemberUseCase {
 		team.addMember(member);
 
 		List<AddTeamMemberResponse.UserResp> resps = new ArrayList<>();
+
 		for (TeamMember teamMember : team.getTeamMembers()) {
 			Member member1 = teamMember.getId().getMember();
 			resps.add(new AddTeamMemberResponse.UserResp(
