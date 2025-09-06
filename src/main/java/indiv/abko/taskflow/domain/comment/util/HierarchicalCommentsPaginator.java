@@ -28,25 +28,27 @@ public class HierarchicalCommentsPaginator {
     }
 
     private List<Comment> paginateHierarchicalComments(PaginationContext paginationContext) {
-        List<Comment> pagedComments = new ArrayList<>();
+        List<Comment> pagedComments = new ArrayList<>(); // 최종 페이지네이션 된 결과물
 
         for (Comment parent : parentComments) {
+            // 상위댓글
             if (paginationContext.isInRange()) {
                 pagedComments.add(parent);
-                paginationContext.next();
-            } else {
-                paginationContext.next();
             }
+
+            paginationContext.next();
 
             if (paginationContext.shouldStop()) {
                 return pagedComments;
             }
 
+            // 대댓글
             List<Comment> childComments = getChildComments(parent);
             for (Comment child : childComments) {
                 if (paginationContext.isInRange()) {
                     pagedComments.add(child);
                 }
+
                 paginationContext.next();
 
                 if (paginationContext.shouldStop()) {
