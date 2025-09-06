@@ -10,6 +10,7 @@ import indiv.abko.taskflow.domain.team.dto.response.ReadSingleTeamResponse;
 import indiv.abko.taskflow.domain.team.entity.Team;
 import indiv.abko.taskflow.domain.team.exception.TeamErrorCode;
 import indiv.abko.taskflow.domain.team.repository.TeamRepository;
+import indiv.abko.taskflow.global.dto.DtoConstants;
 import indiv.abko.taskflow.global.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 
@@ -34,7 +35,7 @@ public class ReadSingleTeamUseCase {
 				member.getName(),
 				member.getEmail(),
 				member.getUserRole().name(),
-				member.getCreatedAt()
+				member.getCreatedAt().toInstant(DtoConstants.REAL_TIME_ZONE_OFFSET)
 			))
 			.collect(Collectors.toList());
 
@@ -42,7 +43,7 @@ public class ReadSingleTeamUseCase {
 			team.getId(),
 			team.getName(),
 			team.getDescription(),
-			team.getCreatedAt(),
+			team.getCreatedAt().toInstant(DtoConstants.REAL_TIME_ZONE_OFFSET),
 			resps
 		);
 	}
