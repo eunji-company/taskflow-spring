@@ -6,8 +6,6 @@ import indiv.abko.taskflow.domain.task.entity.Task;
 import indiv.abko.taskflow.domain.task.exception.TaskErrorCode;
 import indiv.abko.taskflow.domain.task.repository.TaskRepository;
 import indiv.abko.taskflow.domain.user.entity.Member;
-import indiv.abko.taskflow.domain.user.repository.MemberRepository;
-import indiv.abko.taskflow.domain.user.service.MemberService;
 import indiv.abko.taskflow.domain.user.service.MemberServiceApi;
 import indiv.abko.taskflow.global.auth.AuthMember;
 import indiv.abko.taskflow.global.exception.BusinessException;
