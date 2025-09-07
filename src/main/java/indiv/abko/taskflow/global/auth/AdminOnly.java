@@ -1,4 +1,4 @@
-package indiv.abko.taskflow.domain.auth.annotation;
+package indiv.abko.taskflow.global.auth;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,5 +10,5 @@ import org.springframework.security.access.prepost.PreAuthorize;
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @PreAuthorize("hasRole('ADMIN')")
-public @interface IsAdmin {
+public @interface AdminOnly{
 }

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import indiv.abko.taskflow.domain.auth.annotation.IsAdmin;
 import indiv.abko.taskflow.domain.team.dto.request.AddTeamMemberRequest;
 import indiv.abko.taskflow.domain.team.dto.request.CreateTeamRequest;
 import indiv.abko.taskflow.domain.team.dto.request.UpdateTeamRequest;
@@ -31,6 +30,7 @@ import indiv.abko.taskflow.domain.team.service.ReadSingleTeamUseCase;
 import indiv.abko.taskflow.domain.team.service.ReadTeamMembersUseCase;
 import indiv.abko.taskflow.domain.team.service.ReadTeamUseCase;
 import indiv.abko.taskflow.domain.team.service.UpdateTeamUseCase;
+import indiv.abko.taskflow.global.auth.AdminOnly;
 import indiv.abko.taskflow.global.dto.CommonResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -49,12 +49,12 @@ public class TeamController {
 	private final DeleteTeamMemberUseCase deleteTeamMemberUseCase;
 
 	// 팀 생성
-	@IsAdmin
+	@AdminOnly
 	@PostMapping("/api/teams")
 	@ResponseStatus(HttpStatus.CREATED)
 	public CommonResponse<CreateTeamResponse> createTeam(
-		@Valid @RequestBody CreateTeamRequest createTeamRequest
-	) {
+		@Valid @RequestBody
+		CreateTeamRequest createTeamRequest) {
 		CreateTeamResponse createTeamResponse = createTeamUseCase.execute(
 			createTeamRequest.name(),
 			createTeamRequest.description());
@@ -64,8 +64,7 @@ public class TeamController {
 
 	// 팀 조회
 	@GetMapping("/api/teams")
-	public CommonResponse<List<ReadTeamResponse>> getAllTeams(
-	) {
+	public CommonResponse<List<ReadTeamResponse>> getAllTeams() {
 		List<ReadTeamResponse> readTeamResponses = readTeamUseCase.execute();
 
 		return CommonResponse.success("팀 목록을 조회했습니다.", readTeamResponses);
@@ -74,20 +73,21 @@ public class TeamController {
 	// 특정 팀 조회
 	@GetMapping("/api/teams/{teamId}")
 	public CommonResponse<ReadSingleTeamResponse> getTeam(
-		@PathVariable Long teamId
-	) {
+		@PathVariable
+		Long teamId) {
 		ReadSingleTeamResponse readSingleTeamResponse = readSingleTeamUseCase.execute(teamId);
 
 		return CommonResponse.success("팀 정보를 조회했습니다.", readSingleTeamResponse);
 	}
 
 	// 팀 수정
-	@IsAdmin
+	@AdminOnly
 	@PutMapping("/api/teams/{teamId}")
 	public CommonResponse<UpdateTeamResponse> updateTeam(
-		@Valid @RequestBody UpdateTeamRequest updateTeamRequest,
-		@PathVariable Long teamId
-	) {
+		@Valid @RequestBody
+		UpdateTeamRequest updateTeamRequest,
+		@PathVariable
+		Long teamId) {
 		UpdateTeamResponse updateTeamResponse = updateTeamUseCase.execute(
 			updateTeamRequest.name(),
 			updateTeamRequest.description(),
@@ -97,23 +97,24 @@ public class TeamController {
 	}
 
 	// 팀 삭제
-	@IsAdmin
+	@AdminOnly
 	@DeleteMapping("/api/teams/{teamId}")
 	public CommonResponse<Void> deleteTeam(
-		@PathVariable Long teamId
-	) {
+		@PathVariable
+		Long teamId) {
 		deleteTeamUseCase.execute(teamId);
 
 		return CommonResponse.success("팀이 성공적으로 삭제되었습니다.", null);
 	}
 
 	// 팀 멤버 추가
-	@IsAdmin
+	@AdminOnly
 	@PostMapping("/api/teams/{teamId}/members")
 	public CommonResponse<AddTeamMemberResponse> createTeamMember(
-		@Valid @RequestBody AddTeamMemberRequest addTeamMemberRequest,
-		@PathVariable Long teamId
-	) {
+		@Valid @RequestBody
+		AddTeamMemberRequest addTeamMemberRequest,
+		@PathVariable
+		Long teamId) {
 		AddTeamMemberResponse addTeamMemberResponse = addTeamMemberUseCase.execute(
 			addTeamMemberRequest.userId(),
 			teamId);
@@ -124,20 +125,21 @@ public class TeamController {
 	// 팀 멤버 목록 조회
 	@GetMapping("/api/teams/{teamId}/members")
 	public CommonResponse<List<ReadTeamMembersResponse>> getTeamMembers(
-		@PathVariable Long teamId
-	) {
+		@PathVariable
+		Long teamId) {
 		List<ReadTeamMembersResponse> readTeamMembersResponses = readTeamMembersUseCase.execute(teamId);
 
 		return CommonResponse.success("팀 멤버 목록을 조회했습니다.", readTeamMembersResponses);
 	}
 
 	// 팀 멤버 제거
-	@IsAdmin
+	@AdminOnly
 	@DeleteMapping("/api/teams/{teamId}/members/{userId}")
 	public CommonResponse<DeleteTeamMemberResponse> deleteTeamMember(
-		@PathVariable Long teamId,
-		@PathVariable Long userId
-	) {
+		@PathVariable
+		Long teamId,
+		@PathVariable
+		Long userId) {
 		DeleteTeamMemberResponse deleteTeamMemberResponse = deleteTeamMemberUseCase.execute(teamId, userId);
 
 		return CommonResponse.success("멤버가 성공적으로 제거되었습니다.", deleteTeamMemberResponse);

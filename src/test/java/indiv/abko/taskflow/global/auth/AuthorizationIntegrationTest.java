@@ -1,4 +1,4 @@
-package indiv.abko.taskflow.integration;
+package indiv.abko.taskflow.global.auth;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -21,7 +21,7 @@ import indiv.abko.taskflow.global.jwt.JwtUtil;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class TeamApiIntegrationTest {
+public class AuthorizationIntegrationTest {
 
 	@Autowired
 	private TestRestTemplate restTemplate;
@@ -42,8 +42,7 @@ public class TeamApiIntegrationTest {
 
 			Map<String, String> requestBody = Map.of(
 				"name", "Test team name",
-				"description", "Test team description"
-			);
+				"description", "Test team description");
 			HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
 
 			// when
@@ -63,8 +62,7 @@ public class TeamApiIntegrationTest {
 
 			Map<String, String> requestBody = Map.of(
 				"name", "Test team name",
-				"description", "Test team description"
-			);
+				"description", "Test team description");
 			HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
 
 			// when
