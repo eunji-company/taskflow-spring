@@ -20,7 +20,6 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -54,6 +53,8 @@ public class CreateTaskUseCaseTest {
 				TaskPriority.MEDIUM,
 				1L);
 
+		ReflectionTestUtils.setField(task, "createdAt", LocalDateTime.now());
+		ReflectionTestUtils.setField(task, "modifiedAt", LocalDateTime.now());
 		ReflectionTestUtils.setField(task, "member", member);
 
 		CreateTaskRequest createTaskRequest = new CreateTaskRequest();
@@ -64,7 +65,7 @@ public class CreateTaskUseCaseTest {
 		ReflectionTestUtils.setField(createTaskRequest, "priority", TaskPriority.MEDIUM);
 		ReflectionTestUtils.setField(createTaskRequest, "assigneeId", 1L);
 
-		given(memberServiceApi.getByIdOrThrow(anyLong())).willReturn(member);
+//		given(memberServiceApi.getByIdOrThrow(anyLong())).willReturn(member);
 		given(taskRepository.save(any())).willReturn(task);
 
 		// when

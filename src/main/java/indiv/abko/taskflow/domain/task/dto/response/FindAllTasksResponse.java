@@ -16,21 +16,15 @@ public record FindAllTasksResponse(
 		Long id,
 		String title,
 		String description,
-		@JsonFormat(shape = JsonFormat.Shape.STRING,
-				pattern = DtoConstants.TIME_FORMAT,
-				timezone = DtoConstants.DISPLAY_TIME_ZONE_STRING)
+		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DtoConstants.TIME_FORMAT, timezone = DtoConstants.DISPLAY_TIME_ZONE_STRING)
 		Instant dueDate,
 		TaskPriority priority,
 		TaskStatus status,
 		Long assigneeId,
 		AssigneeResponse assignee,
-		@JsonFormat(shape = JsonFormat.Shape.STRING,
-				pattern = DtoConstants.TIME_FORMAT,
-				timezone = DtoConstants.DISPLAY_TIME_ZONE_STRING)
+		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DtoConstants.TIME_FORMAT, timezone = DtoConstants.DISPLAY_TIME_ZONE_STRING)
 		Instant createdAt,
-		@JsonFormat(shape = JsonFormat.Shape.STRING,
-				pattern = DtoConstants.TIME_FORMAT,
-				timezone = DtoConstants.DISPLAY_TIME_ZONE_STRING)
+		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DtoConstants.TIME_FORMAT, timezone = DtoConstants.DISPLAY_TIME_ZONE_STRING)
 		Instant updatedAt
 ) {
 	public static FindAllTasksResponse fromTask(Task task) {
@@ -46,8 +40,8 @@ public record FindAllTasksResponse(
 				.status(task.getStatus())
 				.assigneeId(task.getMember().getId())
 				.assignee(AssigneeResponse.fromMember(assignee))
-				.createdAt(Instant.from(task.getCreatedAt()))
-				.updatedAt(Instant.from(task.getModifiedAt()))
+				.createdAt(task.getCreatedAt().atZone(ZoneId.systemDefault()).toInstant())
+				.updatedAt(task.getModifiedAt().atZone(ZoneId.systemDefault()).toInstant())
 				.build();
 	}
 }
