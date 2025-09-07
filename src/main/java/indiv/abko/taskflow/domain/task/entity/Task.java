@@ -1,8 +1,8 @@
 package indiv.abko.taskflow.domain.task.entity;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 
+import indiv.abko.taskflow.domain.task.dto.response.UpdateTaskResponse;
 import indiv.abko.taskflow.domain.user.entity.Member;
 import indiv.abko.taskflow.global.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
@@ -53,11 +53,24 @@ public class Task extends BaseTimeEntity {
 
 	private LocalDateTime deletedAt;
 
-	public Task(String title, String description, LocalDateTime dueDate, TaskPriority priority, Long assigneeId) {
+	@Column(nullable = false)
+	private Long assigneeId;
+
+	public Task(String title, String description, LocalDateTime dueDate, TaskPriority priority, Long assigneeId, Member member, TaskStatus status) {
 		this.title = title;
 		this.description = description;
 		this.dueDate = dueDate;
 		this.priority = priority;
-		this.status = TaskStatus.TODO;
+		this.assigneeId = assigneeId;
+		this.member = member;
+		this.status = status;
+	}
+
+    public void updateTask(String title, String description, LocalDateTime dueDate, TaskPriority priority, Long assigneeId) {
+		this.title = title;
+		this.description = description;
+		this.dueDate = dueDate;
+		this.priority = priority;
+		this.assigneeId = assigneeId;
 	}
 }

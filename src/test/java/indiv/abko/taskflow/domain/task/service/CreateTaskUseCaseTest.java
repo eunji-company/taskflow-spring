@@ -4,6 +4,7 @@ import indiv.abko.taskflow.domain.task.dto.reqeust.CreateTaskRequest;
 import indiv.abko.taskflow.domain.task.dto.response.CreateTaskResponse;
 import indiv.abko.taskflow.domain.task.entity.Task;
 import indiv.abko.taskflow.domain.task.entity.TaskPriority;
+import indiv.abko.taskflow.domain.task.entity.TaskStatus;
 import indiv.abko.taskflow.domain.task.repository.TaskRepository;
 import indiv.abko.taskflow.domain.user.entity.Member;
 import indiv.abko.taskflow.domain.user.entity.UserRole;
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,7 +44,8 @@ public class CreateTaskUseCaseTest {
 				"1234",
 				"gildong@gmail.com",
 				"홍길동",
-				UserRole.ADMIN);
+				UserRole.ADMIN
+		);
 
 		ReflectionTestUtils.setField(member, "id", 1L);
 
@@ -51,7 +54,10 @@ public class CreateTaskUseCaseTest {
 				"작업 내용",
 				LocalDateTime.now().plusDays(7),
 				TaskPriority.MEDIUM,
-				1L);
+				1L,
+				member,
+				TaskStatus.DONE
+		);
 
 		ReflectionTestUtils.setField(task, "createdAt", LocalDateTime.now());
 		ReflectionTestUtils.setField(task, "modifiedAt", LocalDateTime.now());
@@ -65,7 +71,7 @@ public class CreateTaskUseCaseTest {
 		ReflectionTestUtils.setField(createTaskRequest, "priority", TaskPriority.MEDIUM);
 		ReflectionTestUtils.setField(createTaskRequest, "assigneeId", 1L);
 
-//		given(memberServiceApi.getByIdOrThrow(anyLong())).willReturn(member);
+		given(memberServiceApi.getByIdOrThrow(anyLong())).willReturn(member);
 		given(taskRepository.save(any())).willReturn(task);
 
 		// when
