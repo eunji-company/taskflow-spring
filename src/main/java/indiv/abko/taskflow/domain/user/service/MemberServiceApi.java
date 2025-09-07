@@ -14,9 +14,10 @@ public interface MemberServiceApi {
 
 	boolean existsByEmail(String email);
 
+	// TODO: 구현해주세요 혜준님
 	default boolean exstsById(long memberId) {
-		//id가 존재한다면 true, 없다면 false 구현해주세요 혜준님
-		return false;
+		//id가 존재한다면 true, 없다면 false
+		return true;
 	}
 
 	Optional<Member> findByUsername(String username);

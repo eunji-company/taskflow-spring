@@ -34,10 +34,6 @@ public class FindAllTasksUseCase {
 
 		Page<Task> tasks = taskRepository.findAllByMemberId(authMember.memberId(), pageable);
 
-		if (tasks.isEmpty()) {
-			throw new BusinessException(TaskErrorCode.TASK_LIST_EMPTY);
-		}
-
 		return tasks.map(FindAllTasksResponse::fromTask);
 	}
 }
