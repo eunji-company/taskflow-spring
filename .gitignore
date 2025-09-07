@@ -38,3 +38,4 @@ out/
 
 ### application ymls ###
 application-*.yml
+!application-test.yml

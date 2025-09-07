@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -94,6 +95,14 @@ public class GlobalExceptionHandler {
 		String message = String.format("지원되지 않는 HTTP 메서드입니다: %s. 허용된 메서드: %s", method, supported);
 		Map<String, String> errors = Map.of("method", message);
 		return new ResponseEntity<>(CommonResponse.failure("잘못된 요청입니다.", errors), HttpStatus.METHOD_NOT_ALLOWED);
+	}
+
+	@ExceptionHandler(AccessDeniedException.class)
+	public ResponseEntity<CommonResponse<?>> handleAccessDeniedException(AccessDeniedException ex) {
+		ErrorCode errorCode = AuthErrorCode.FORBIDDEN;
+		HttpStatus status = errorCode.getHttpStatus();
+		String message = errorCode.getMessage();
+		return new ResponseEntity<>(CommonResponse.failure(message, null), status);
 	}
 
 	@ExceptionHandler(Exception.class)

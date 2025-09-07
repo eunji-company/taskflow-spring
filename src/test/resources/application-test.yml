@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+jwt:
+  issuer: taskflow
+  secret: 9da94bab9824a466ae237b291ce1be9f5d2a5d166079b26992b3cbd356eba561
+  access-token-validity-seconds: 3600
