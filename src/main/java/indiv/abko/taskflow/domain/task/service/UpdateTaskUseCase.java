@@ -34,6 +34,10 @@ public class UpdateTaskUseCase {
                 () -> new BusinessException(TaskErrorCode.TASK_LIST_EMPTY)
         );
 
+        if (authMember == null) {
+            throw new BusinessException(TaskErrorCode.TASK_UNAUTHORIZED); // 인증 안 된 경우
+        }
+
         task.updateTask(
                 request.getTitle(),
                 request.getDescription(),
