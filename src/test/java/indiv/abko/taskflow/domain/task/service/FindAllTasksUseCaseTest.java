@@ -21,6 +21,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import indiv.abko.taskflow.domain.task.dto.response.FindAllTasksResponse;
 import indiv.abko.taskflow.domain.task.entity.Task;
 import indiv.abko.taskflow.domain.task.entity.TaskPriority;
+import indiv.abko.taskflow.domain.task.entity.TaskStatus;
 import indiv.abko.taskflow.domain.task.repository.TaskRepository;
 import indiv.abko.taskflow.domain.user.entity.Member;
 import indiv.abko.taskflow.domain.user.entity.UserRole;
@@ -54,11 +55,13 @@ public class FindAllTasksUseCaseTest {
 		ReflectionTestUtils.setField(member, "id", 1L);
 
 		Task task = new Task(
-			"작업 제목",
-			"작업 내용",
-			LocalDateTime.now().plusDays(7),
-			TaskPriority.MEDIUM,
-			1L
+				"작업 제목",
+				"작업 내용",
+				LocalDateTime.now().plusDays(7),
+				TaskPriority.MEDIUM,
+				1L,
+				member,
+				TaskStatus.DONE
 		);
 		ReflectionTestUtils.setField(task, "createdAt", LocalDateTime.now());
 		ReflectionTestUtils.setField(task, "modifiedAt", LocalDateTime.now());
