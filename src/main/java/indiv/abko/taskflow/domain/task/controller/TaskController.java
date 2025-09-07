@@ -10,6 +10,7 @@ import indiv.abko.taskflow.domain.task.service.CreateTaskUseCase;
 import indiv.abko.taskflow.domain.task.service.FindAllTasksUseCase;
 import indiv.abko.taskflow.domain.task.service.FindTaskUseCase;
 import indiv.abko.taskflow.domain.task.service.UpdateTaskUseCase;
+import indiv.abko.taskflow.domain.task.service.*;
 import indiv.abko.taskflow.global.auth.AuthMember;
 import indiv.abko.taskflow.global.dto.CommonResponse;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class TaskController {
 	private final FindAllTasksUseCase findAllTasksUseCase;
 	private final FindTaskUseCase findTaskUseCase;
 	private final UpdateTaskUseCase updateTaskUseCase;
+	private final DeleteTaskUseCase deleteTaskUseCase;
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -69,4 +71,15 @@ public class TaskController {
 		UpdateTaskResponse response = updateTaskUseCase.execute(authMember, taskId, request);
 		return CommonResponse.success("Task가 수정되었습니다.", response);
 	}
+
+	@DeleteMapping("/{taskId}")
+	@ResponseStatus(HttpStatus.OK)
+	public CommonResponse<Void> deleteTask(
+			@AuthenticationPrincipal AuthMember authMember,
+			@PathVariable Long taskId
+	) {
+		deleteTaskUseCase.execute(authMember, taskId);
+		return CommonResponse.success("Task가 삭제되었습니다.", null);
+	}
+
 }

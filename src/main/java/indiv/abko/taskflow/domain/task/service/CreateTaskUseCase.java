@@ -28,7 +28,7 @@ public class CreateTaskUseCase {
 		Member member = memberServiceApi.getByIdOrThrow(request.getAssigneeId());
 
 		if (authMember.memberId() != (member.getId())){
-			throw new BusinessException(TaskErrorCode.FORBIDDEN_TASK_CREATION);
+			throw new BusinessException(TaskErrorCode.TASK_FORBIDDEN);
 		}
 
 		Task task = new Task(
