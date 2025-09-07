@@ -21,7 +21,7 @@ public class MemberService implements MemberServiceApi {
 	@Transactional(readOnly = true)
 	public Member getByIdOrThrow(long memberId) {
 		return memberRepository.findById(memberId)
-				.orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
+			.orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
 	}
 
 	@Override
@@ -44,7 +44,20 @@ public class MemberService implements MemberServiceApi {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
+	public boolean existsById(long memberId) {
+		return memberRepository.existsById(memberId);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
 	public Optional<Member> findByUsername(String username) {
 		return memberRepository.findByUsername(username);
+	}
+
+	@Override
+	@Transactional
+	public void withdraw(Member member) {
+		memberRepository.delete(member);
 	}
 }
