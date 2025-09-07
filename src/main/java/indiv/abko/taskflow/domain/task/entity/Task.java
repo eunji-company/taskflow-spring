@@ -73,4 +73,8 @@ public class Task extends BaseTimeEntity {
 		this.priority = priority;
 		this.assigneeId = assigneeId;
 	}
+
+	public void updateStatus(TaskStatus status) {
+		this.status = status;
+	}
 }
