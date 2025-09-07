@@ -4,12 +4,11 @@ import indiv.abko.taskflow.domain.task.dto.reqeust.CreateTaskRequest;
 import indiv.abko.taskflow.domain.task.dto.reqeust.UpdateTaskRequest;
 import indiv.abko.taskflow.domain.task.dto.response.CreateTaskResponse;
 import indiv.abko.taskflow.domain.task.dto.response.FindAllTasksResponse;
+import indiv.abko.taskflow.domain.task.dto.response.PageResponse;
 import indiv.abko.taskflow.domain.task.dto.response.UpdateTaskResponse;
-import indiv.abko.taskflow.domain.task.entity.Task;
 import indiv.abko.taskflow.domain.task.service.CreateTaskUseCase;
 import indiv.abko.taskflow.domain.task.service.FindAllTasksUseCase;
 import indiv.abko.taskflow.domain.task.service.UpdateTaskUseCase;
-import indiv.abko.taskflow.domain.user.entity.Member;
 import indiv.abko.taskflow.global.auth.AuthMember;
 import indiv.abko.taskflow.global.dto.CommonResponse;
 import lombok.RequiredArgsConstructor;
@@ -39,12 +38,13 @@ public class TaskController {
 
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	public CommonResponse<Page<FindAllTasksResponse>> findAllTasks(
+	public CommonResponse<PageResponse<FindAllTasksResponse>> findAllTasks(
 			@AuthenticationPrincipal AuthMember authMember,
 			@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size
 	) {
-		Page<FindAllTasksResponse> response = findAllTasksUseCase.execute(authMember, page, size);
+		Page<FindAllTasksResponse> tasks = findAllTasksUseCase.execute(authMember, page, size);
+		PageResponse<FindAllTasksResponse> response = new PageResponse<>(tasks);
 		return CommonResponse.success("Task 목록을 조회했습니다.", response);
 	}
 
