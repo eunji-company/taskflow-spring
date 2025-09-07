@@ -1,6 +1,7 @@
 package indiv.abko.taskflow.domain.task.controller;
 
 import indiv.abko.taskflow.domain.task.dto.reqeust.CreateTaskRequest;
+import indiv.abko.taskflow.domain.task.dto.reqeust.UpdateStatusRequest;
 import indiv.abko.taskflow.domain.task.dto.reqeust.UpdateTaskRequest;
 import indiv.abko.taskflow.domain.task.dto.response.*;
 import indiv.abko.taskflow.domain.task.dto.response.CreateTaskResponse;
@@ -29,6 +30,7 @@ public class TaskController {
 	private final FindTaskUseCase findTaskUseCase;
 	private final UpdateTaskUseCase updateTaskUseCase;
 	private final DeleteTaskUseCase deleteTaskUseCase;
+	private final UpdateStatusUseCase updateStatusUseCase;
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -80,6 +82,16 @@ public class TaskController {
 	) {
 		deleteTaskUseCase.execute(authMember, taskId);
 		return CommonResponse.success("Task가 삭제되었습니다.", null);
+	}
+
+	@PutMapping("/{taskId}/status")
+	@ResponseStatus(HttpStatus.OK)
+	public CommonResponse<UpdateStatusResponse> updateStatus(
+			@PathVariable Long taskId,
+			@RequestBody UpdateStatusRequest request
+	) {
+		UpdateStatusResponse response = updateStatusUseCase.execute(taskId, request);
+		return CommonResponse.success("작업 상태가 없데이트 되었습니다.", response);
 	}
 
 }
