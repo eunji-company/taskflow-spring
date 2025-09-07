@@ -2,12 +2,11 @@ package indiv.abko.taskflow.domain.task.controller;
 
 import indiv.abko.taskflow.domain.task.dto.reqeust.CreateTaskRequest;
 import indiv.abko.taskflow.domain.task.dto.reqeust.UpdateTaskRequest;
-import indiv.abko.taskflow.domain.task.dto.response.CreateTaskResponse;
-import indiv.abko.taskflow.domain.task.dto.response.FindAllTasksResponse;
-import indiv.abko.taskflow.domain.task.dto.response.PageResponse;
-import indiv.abko.taskflow.domain.task.dto.response.UpdateTaskResponse;
+import indiv.abko.taskflow.domain.task.dto.response.*;
+import indiv.abko.taskflow.domain.task.entity.Task;
 import indiv.abko.taskflow.domain.task.service.CreateTaskUseCase;
 import indiv.abko.taskflow.domain.task.service.FindAllTasksUseCase;
+import indiv.abko.taskflow.domain.task.service.FindTaskUseCase;
 import indiv.abko.taskflow.domain.task.service.UpdateTaskUseCase;
 import indiv.abko.taskflow.global.auth.AuthMember;
 import indiv.abko.taskflow.global.dto.CommonResponse;
@@ -24,6 +23,7 @@ public class TaskController {
 
 	private final CreateTaskUseCase createTaskUseCase;
 	private final FindAllTasksUseCase findAllTasksUseCase;
+	private final FindTaskUseCase findTaskUseCase;
 	private final UpdateTaskUseCase updateTaskUseCase;
 
 	@PostMapping
@@ -47,6 +47,15 @@ public class TaskController {
 		PageResponse<FindAllTasksResponse> response = new PageResponse<>(tasks);
 		return CommonResponse.success("Task 목록을 조회했습니다.", response);
 	}
+
+	@GetMapping("/{taskId}")
+	@ResponseStatus(HttpStatus.OK)
+	public CommonResponse<FindTaskResponse> findTask(
+			@PathVariable Long taskId
+	) {
+		FindTaskResponse response = findTaskUseCase.execute(taskId);
+        return CommonResponse.success("Task를 조회했습니다.", response);
+    }
 
 	@PatchMapping("/{taskId}")
 	@ResponseStatus(HttpStatus.OK)
