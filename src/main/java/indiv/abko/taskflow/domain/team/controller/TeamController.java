@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import indiv.abko.taskflow.domain.auth.annotation.IsAdmin;
 import indiv.abko.taskflow.domain.team.dto.request.AddTeamMemberRequest;
 import indiv.abko.taskflow.domain.team.dto.request.CreateTeamRequest;
 import indiv.abko.taskflow.domain.team.dto.request.UpdateTeamRequest;
@@ -45,6 +46,7 @@ public class TeamController {
 	private final DeleteTeamMemberUseCase deleteTeamMemberUseCase;
 
 	// 팀 생성
+	@IsAdmin
 	@PostMapping("/api/teams")
 	@ResponseStatus(HttpStatus.CREATED)
 	public CommonResponse<CreateTeamResponse> createTeam(
@@ -77,6 +79,7 @@ public class TeamController {
 	}
 
 	// 팀 수정
+	@IsAdmin
 	@PutMapping("/api/teams/{teamId}")
 	public CommonResponse<UpdateTeamResponse> updateTeam(
 		@Valid @RequestBody UpdateTeamRequest updateTeamRequest,
@@ -91,6 +94,7 @@ public class TeamController {
 	}
 
 	// 팀 삭제
+	@IsAdmin
 	@DeleteMapping("/api/teams/{teamId}")
 	public CommonResponse<Void> deleteTeam(
 		@PathVariable Long teamId
@@ -101,6 +105,7 @@ public class TeamController {
 	}
 
 	// 팀 멤버 추가
+	@IsAdmin
 	@PostMapping("/api/teams/{teamId}/members")
 	public CommonResponse<AddTeamMemberResponse> createTeamMember(
 		@Valid @RequestBody AddTeamMemberRequest addTeamMemberRequest,
@@ -114,6 +119,7 @@ public class TeamController {
 	}
 
 	// 팀 멤버 제거
+	@IsAdmin
 	@DeleteMapping("/api/teams/{teamId}/members/{userId}")
 	public CommonResponse<DeleteTeamMemberResponse> deleteTeamMember(
 		@PathVariable Long teamId,
