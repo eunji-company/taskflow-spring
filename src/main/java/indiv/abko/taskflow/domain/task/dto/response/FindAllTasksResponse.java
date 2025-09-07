@@ -12,26 +12,32 @@ import java.time.Instant;
 import java.time.ZoneId;
 
 @Builder
-public record CreateTaskResponse(
+public record FindAllTasksResponse(
 		Long id,
 		String title,
 		String description,
-		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DtoConstants.TIME_FORMAT, timezone = DtoConstants.DISPLAY_TIME_ZONE_STRING)
+		@JsonFormat(shape = JsonFormat.Shape.STRING,
+				pattern = DtoConstants.TIME_FORMAT,
+				timezone = DtoConstants.DISPLAY_TIME_ZONE_STRING)
 		Instant dueDate,
 		TaskPriority priority,
 		TaskStatus status,
 		Long assigneeId,
 		AssigneeResponse assignee,
-		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DtoConstants.TIME_FORMAT, timezone = DtoConstants.DISPLAY_TIME_ZONE_STRING)
+		@JsonFormat(shape = JsonFormat.Shape.STRING,
+				pattern = DtoConstants.TIME_FORMAT,
+				timezone = DtoConstants.DISPLAY_TIME_ZONE_STRING)
 		Instant createdAt,
-		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DtoConstants.TIME_FORMAT, timezone = DtoConstants.DISPLAY_TIME_ZONE_STRING)
+		@JsonFormat(shape = JsonFormat.Shape.STRING,
+				pattern = DtoConstants.TIME_FORMAT,
+				timezone = DtoConstants.DISPLAY_TIME_ZONE_STRING)
 		Instant updatedAt
 ) {
-	public static CreateTaskResponse fromTask(Task task) {
+	public static FindAllTasksResponse fromTask(Task task) {
 
 		Member assignee = task.getMember();
 
-		return CreateTaskResponse.builder()
+		return FindAllTasksResponse.builder()
 				.id(task.getId())
 				.title(task.getTitle())
 				.description(task.getDescription())
@@ -45,4 +51,3 @@ public record CreateTaskResponse(
 				.build();
 	}
 }
-
