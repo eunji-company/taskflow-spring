@@ -2,8 +2,8 @@ package indiv.abko.taskflow.domain.task.service;
 
 import indiv.abko.taskflow.domain.task.dto.response.FindAllTasksResponse;
 import indiv.abko.taskflow.domain.task.entity.Task;
+import indiv.abko.taskflow.domain.task.exception.TaskErrorCode;
 import indiv.abko.taskflow.domain.task.repository.TaskRepository;
-import indiv.abko.taskflow.domain.user.exception.MemberErrorCode;
 import indiv.abko.taskflow.domain.user.service.MemberServiceApi;
 import indiv.abko.taskflow.global.auth.AuthMember;
 import indiv.abko.taskflow.global.exception.BusinessException;
@@ -29,10 +29,14 @@ public class FindAllTasksUseCase {
 		Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").ascending());
 
 		if (!memberServiceApi.exstsById(authMember.memberId())) {
-			throw new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND);
+			throw new BusinessException(TaskErrorCode.MEMBER_NOT_FOUND);
 		}
 
 		Page<Task> tasks = taskRepository.findAllByMemberId(authMember.memberId(), pageable);
+
+		if (tasks.isEmpty()) {
+			throw new BusinessException(TaskErrorCode.TASK_LIST_EMPTY);
+		}
 
 		return tasks.map(FindAllTasksResponse::fromTask);
 	}

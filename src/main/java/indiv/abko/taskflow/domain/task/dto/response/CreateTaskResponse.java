@@ -40,9 +40,8 @@ public record CreateTaskResponse(
 				.status(task.getStatus())
 				.assigneeId(task.getMember().getId())
 				.assignee(AssigneeResponse.fromMember(assignee))
-				.createdAt(Instant.from(task.getCreatedAt()))
-				.updatedAt(Instant.from(task.getModifiedAt()))
+				.createdAt(task.getCreatedAt().atZone(ZoneId.systemDefault()).toInstant())
+				.updatedAt(task.getModifiedAt().atZone(ZoneId.systemDefault()).toInstant())
 				.build();
 	}
 }
-
