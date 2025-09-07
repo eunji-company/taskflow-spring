@@ -20,4 +20,3 @@ public class TaskService implements TaskServiceApi {
 		);
 	}
 }
-
