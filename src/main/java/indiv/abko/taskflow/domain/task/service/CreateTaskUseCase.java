@@ -36,7 +36,6 @@ public class CreateTaskUseCase {
 				request.getDescription(),
 				request.getDueDate(),
 				request.getPriority(),
-				request.getAssigneeId(),
 				member,
 				TaskStatus.TODO
 		);

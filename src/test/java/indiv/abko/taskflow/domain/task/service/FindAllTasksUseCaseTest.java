@@ -59,7 +59,6 @@ public class FindAllTasksUseCaseTest {
 				"작업 내용",
 				LocalDateTime.now().plusDays(7),
 				TaskPriority.MEDIUM,
-				1L,
 				member,
 				TaskStatus.DONE
 		);
@@ -71,11 +70,12 @@ public class FindAllTasksUseCaseTest {
 		Page<Task> tasks = new PageImpl<>(List.of(task), pageable, 1);
 
 		given(memberServiceApi.existsById(authMember.memberId())).willReturn(true);
-		given(taskRepository.findAllByMemberId(authMember.memberId(), pageable)).willReturn(tasks);
+		given(taskRepository.findAllByStatusAndMemberId(TaskStatus.TODO, 1L, pageable))
+				.willReturn(tasks);
 
 		//when
 		Page<FindAllTasksResponse> findAllTasksResponse = findAllTasksUseCase
-			.execute(new AuthMember(1L), 0, 10);
+			.execute(new AuthMember(1L), TaskStatus.TODO, 1L,0, 10);
 
 		//then
 		assertThat(findAllTasksResponse).isNotNull();

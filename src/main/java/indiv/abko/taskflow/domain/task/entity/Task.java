@@ -53,25 +53,21 @@ public class Task extends BaseTimeEntity {
 
 	private LocalDateTime deletedAt;
 
-	@Column(nullable = false)
-	private Long assigneeId;
-
-	public Task(String title, String description, LocalDateTime dueDate, TaskPriority priority, Long assigneeId, Member member, TaskStatus status) {
+	public Task(String title, String description, LocalDateTime dueDate, TaskPriority priority, Member member, TaskStatus status) {
 		this.title = title;
 		this.description = description;
 		this.dueDate = dueDate;
 		this.priority = priority;
-		this.assigneeId = assigneeId;
 		this.member = member;
 		this.status = status;
 	}
 
-    public void updateTask(String title, String description, LocalDateTime dueDate, TaskPriority priority, Long assigneeId) {
+    public void updateTask(String title, String description, LocalDateTime dueDate, TaskPriority priority, Member member) {
 		this.title = title;
 		this.description = description;
 		this.dueDate = dueDate;
 		this.priority = priority;
-		this.assigneeId = assigneeId;
+		this.member = member;
 	}
 
 	public void updateStatus(TaskStatus status) {

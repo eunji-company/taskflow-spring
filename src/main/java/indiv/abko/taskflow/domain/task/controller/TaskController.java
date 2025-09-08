@@ -7,6 +7,7 @@ import indiv.abko.taskflow.domain.task.dto.response.*;
 import indiv.abko.taskflow.domain.task.dto.response.CreateTaskResponse;
 import indiv.abko.taskflow.domain.task.dto.response.FindAllTasksResponse;
 import indiv.abko.taskflow.domain.task.dto.response.UpdateTaskResponse;
+import indiv.abko.taskflow.domain.task.entity.TaskStatus;
 import indiv.abko.taskflow.domain.task.service.CreateTaskUseCase;
 import indiv.abko.taskflow.domain.task.service.FindAllTasksUseCase;
 import indiv.abko.taskflow.domain.task.service.FindTaskUseCase;
@@ -46,10 +47,12 @@ public class TaskController {
 	@ResponseStatus(HttpStatus.OK)
 	public CommonResponse<PageResponse<FindAllTasksResponse>> findAllTasks(
 			@AuthenticationPrincipal AuthMember authMember,
+			@RequestParam(required = false) TaskStatus status,
+			@RequestParam(required = false) Long assigneeId,
 			@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size
 	) {
-		Page<FindAllTasksResponse> tasks = findAllTasksUseCase.execute(authMember, page, size);
+		Page<FindAllTasksResponse> tasks = findAllTasksUseCase.execute(authMember, status, assigneeId, page, size);
 		PageResponse<FindAllTasksResponse> response = new PageResponse<>(tasks);
 		return CommonResponse.success("Task 목록을 조회했습니다.", response);
 	}
@@ -70,7 +73,7 @@ public class TaskController {
 		@PathVariable Long taskId,
 		@RequestBody UpdateTaskRequest request
 	) {
-		UpdateTaskResponse response = updateTaskUseCase.execute(authMember, taskId, request);
+		UpdateTaskResponse response = updateTaskUseCase.execute(taskId, request);
 		return CommonResponse.success("Task가 수정되었습니다.", response);
 	}
 
@@ -80,7 +83,7 @@ public class TaskController {
 			@AuthenticationPrincipal AuthMember authMember,
 			@PathVariable Long taskId
 	) {
-		deleteTaskUseCase.execute(authMember, taskId);
+		deleteTaskUseCase.execute(taskId);
 		return CommonResponse.success("Task가 삭제되었습니다.", null);
 	}
 

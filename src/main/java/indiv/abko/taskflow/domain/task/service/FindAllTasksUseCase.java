@@ -1,5 +1,6 @@
 package indiv.abko.taskflow.domain.task.service;
 
+import indiv.abko.taskflow.domain.task.entity.TaskStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +26,7 @@ public class FindAllTasksUseCase {
 	private final MemberServiceApi memberServiceApi;
 
 	//Task 전체 조회
-	public Page<FindAllTasksResponse> execute(AuthMember authMember, int page, int size) {
+	public Page<FindAllTasksResponse> execute(AuthMember authMember, TaskStatus status, Long assigneeId, int page, int size) {
 
 		Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").ascending());
 
@@ -33,7 +34,17 @@ public class FindAllTasksUseCase {
 			throw new BusinessException(TaskErrorCode.MEMBER_NOT_FOUND);
 		}
 
-		Page<Task> tasks = taskRepository.findAllByMemberId(authMember.memberId(), pageable);
+		Page<Task> tasks;
+
+		if (status != null && assigneeId != null) {
+			tasks = taskRepository.findAllByStatusAndMemberId(status, assigneeId, pageable);
+		} else if (status != null) {
+			tasks = taskRepository.findAllByStatus(status, pageable);
+		} else if (assigneeId != null) {
+			tasks = taskRepository.findAllByMemberId(assigneeId, pageable);
+		} else {
+			tasks = taskRepository.findAll(pageable);
+		}
 
 		return tasks.map(FindAllTasksResponse::fromTask);
 	}

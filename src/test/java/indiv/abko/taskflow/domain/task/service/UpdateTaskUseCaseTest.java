@@ -49,14 +49,13 @@ public class UpdateTaskUseCaseTest {
                 "홍길동",
                 UserRole.ADMIN
         );
-        ReflectionTestUtils.setField(member, "id", 1L);
+        ReflectionTestUtils.setField(member, "id", 2L);
         
         Task task = new Task(
                 "작업 제목",
                 "작업 내용",
                 LocalDateTime.now().plusDays(7),
                 MEDIUM,
-                1L,
                 member,
                 TaskStatus.DONE
         );
@@ -76,12 +75,12 @@ public class UpdateTaskUseCaseTest {
         ReflectionTestUtils.setField(updateTaskRequest, "priority", TaskPriority.HIGH);
         ReflectionTestUtils.setField(updateTaskRequest, "assigneeId", 2L);
         
-        given(memberServiceApi.getByIdOrThrow(anyLong())).willReturn(member);
+        given(memberServiceApi.getByIdOrThrow(2L)).willReturn(member);
         given(taskRepository.findById(anyLong())).willReturn(Optional.of(task));
         
         //when
         UpdateTaskResponse updateTaskResponse = updateTaskUseCase
-                .execute(new AuthMember(1L), 1L, updateTaskRequest);
+                .execute(new AuthMember(1L).memberId(), updateTaskRequest);
         
         //then
         assertThat(updateTaskResponse.title()).isEqualTo("수정한 작업 제목");
