@@ -26,18 +26,20 @@ public class MemberController {
 	private final ViewAvailableMembersInfoUseCase viewAvailableMembersInfoUseCase;
 
 	@GetMapping("/me")
-	public CommonResponse<MemberInfoResponse> getMember(@AuthenticationPrincipal AuthMember authMember) {
+	public CommonResponse<MemberInfoResponse> getMember(@AuthenticationPrincipal
+	AuthMember authMember) {
 		return CommonResponse.success("사용자 정보를 조회했습니다.", viewMemberInfoUseCase.execute(authMember.memberId()));
 	}
 
-	@GetMapping("/")
+	@GetMapping
 	public CommonResponse<List<MembersInfoResponse>> getAllMembers() {
 		return CommonResponse.success("요청이 성공적으로 처리되었습니다.", viewMembersInfoUseCase.execute());
 	}
 
 	@GetMapping("/available")
 	public CommonResponse<List<MemberInfoResponse>> getAvailableMembers(
-		@RequestParam(required = true, name = "teamId") Long teamId) {
+		@RequestParam(required = true, name = "teamId")
+		Long teamId) {
 		return CommonResponse.success("사용 가능한 사용자 목록을 조회했습니다.",
 			viewAvailableMembersInfoUseCase.execute(teamId));
 	}
