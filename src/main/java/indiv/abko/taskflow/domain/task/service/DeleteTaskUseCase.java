@@ -17,7 +17,7 @@ public class DeleteTaskUseCase {
 
     //Task 삭제
     @Transactional
-    public void execute(AuthMember authMember, Long taskId) {
+    public void execute(Long taskId) {
 
         Task task = taskRepository.findById(taskId).orElseThrow(
                 () -> new BusinessException(TaskErrorCode.TASK_NOT_FOUND)

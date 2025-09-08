@@ -54,7 +54,6 @@ public class CreateTaskUseCaseTest {
 				"작업 내용",
 				LocalDateTime.now().plusDays(7),
 				TaskPriority.MEDIUM,
-				1L,
 				member,
 				TaskStatus.DONE
 		);

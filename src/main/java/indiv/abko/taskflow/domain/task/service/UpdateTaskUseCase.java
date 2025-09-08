@@ -24,7 +24,7 @@ public class UpdateTaskUseCase {
 
     //Task 수정
     @Transactional
-    public UpdateTaskResponse execute(AuthMember authMember, Long taskId, UpdateTaskRequest request){
+    public UpdateTaskResponse execute(Long taskId, UpdateTaskRequest request){
 
         Member member = memberServiceApi.getByIdOrThrow(request.getAssigneeId());
 
@@ -37,14 +37,14 @@ public class UpdateTaskUseCase {
                 request.getDescription(),
                 request.getDueDate(),
                 request.getPriority(),
-                request.getAssigneeId()
+                member
         );
         return new UpdateTaskResponse(
                 task.getTitle(),
                 task.getDescription(),
                 task.getDueDate().atZone(ZoneId.systemDefault()).toInstant(),
                 task.getPriority(),
-                task.getAssigneeId()
+                task.getMember().getId()
         );
     }
 }
