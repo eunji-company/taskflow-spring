@@ -430,36 +430,15 @@ docker build -t taskflow:latest .
 docker run -p 8080:8080 -e SPRING_PROFILES_ACTIVE=prod taskflow:latest
 ```
 
-## 🤝 기여하기
-
-TaskFlow 프로젝트에 기여해주셔서 감사합니다! 다음 가이드라인을 따라주세요:
-
-### 기여 방법
-
-1. 이슈 생성 또는 기존 이슈 확인
-2. 기능 브랜치 생성 (`feature/기능명` 또는 `bugfix/버그명`)
-3. 코드 작성 및 테스트 추가
-4. Pull Request 생성
-
-### 코딩 스타일
-
-- **Java 코딩 컨벤션**: Google Java Style Guide 준수
-- **커밋 메시지**: Conventional Commits 형식 사용
-- **테스트 커버리지**: 최소 80% 이상 유지
-
 ### 브랜치 전략
 
 ```
-main                    # 운영 배포 브랜치
+main                   # 운영 배포 브랜치
 ├── develop            # 개발 브랜치
-├── feature/*          # 기능 개발 브랜치
-├── bugfix/*          # 버그 수정 브랜치
-└── release/*         # 릴리즈 준비 브랜치
+│   ├── feature/*      # 기능 개발 브랜치
+│   └── fix/*          # 버그 수정 브랜치
+└── release/*          # 릴리즈 준비 브랜치
 ```
-
-## 📝 라이센스
-
-이 프로젝트는 MIT 라이센스 하에 배포됩니다. 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
 
 ## 👨‍💻 개발팀
 
@@ -472,7 +451,6 @@ main                    # 운영 배포 브랜치
 프로젝트에 대한 질문이나 제안사항이 있으시면 다음을 통해 연락해주세요:
 
 - **GitHub Issues**: [프로젝트 이슈 페이지](https://github.com/eunji-company/taskflow-spring/issues)
-- **Email**: taskflow.support@example.com
 
 ---
 
