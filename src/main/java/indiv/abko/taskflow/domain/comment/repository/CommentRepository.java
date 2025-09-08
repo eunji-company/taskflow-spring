@@ -15,10 +15,10 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 	void deleteAllByParentComment(Comment parentComment);
 
 	@EntityGraph(attributePaths = {"member", "task"})
-	List<Comment> findWithDetailsByTaskIdOrderByCreatedAtDesc(long taskId);
+	List<Comment> findWithDetailsByTaskIdAndParentCommentIsNullOrderByCreatedAtDesc(long taskId);
 
 	@EntityGraph(attributePaths = {"member", "task"})
-	List<Comment> findWithDetailsByTaskIdOrderByCreatedAt(long taskId);
+	List<Comment> findWithDetailsByTaskIdAndParentCommentIsNullOrderByCreatedAt(long taskId);
 
 	@EntityGraph(attributePaths = {"member", "parentComment"})
 	List<Comment> findWithDetailByParentCommentIsInOrderByCreatedAt(List<Comment> parentComments);

@@ -22,6 +22,7 @@ import indiv.abko.taskflow.domain.comment.entity.Comment;
 import indiv.abko.taskflow.domain.comment.mapper.CommentMapper;
 import indiv.abko.taskflow.domain.comment.repository.CommentRepository;
 import indiv.abko.taskflow.domain.task.entity.Task;
+import indiv.abko.taskflow.domain.task.service.TaskServiceApi;
 import indiv.abko.taskflow.domain.user.entity.Member;
 import indiv.abko.taskflow.domain.user.entity.UserRole;
 import indiv.abko.taskflow.domain.user.service.MemberServiceApi;
@@ -30,6 +31,9 @@ import indiv.abko.taskflow.domain.user.service.MemberServiceApi;
 public class WriteCommentToCommentUseCaseTest {
     @Mock
     private MemberServiceApi memberServiceApi;
+
+    @Mock
+    private TaskServiceApi taskServiceApi;
 
     @Mock
     private CommentRepository commentRepository;
@@ -47,9 +51,10 @@ public class WriteCommentToCommentUseCaseTest {
             "null");
         Member member = Member.of("null", "null", "null", "null", UserRole.USER);
         Task task = Mockito.mock(Task.class);
+        ReflectionTestUtils.setField(task, "id", 1L);
         Comment parentComment = Comment.of(member, task, "null");
         ReflectionTestUtils.setField(parentComment, "id", 1L);
-        Comment newComment = Comment.of(member, parentComment, "null");
+        Comment newComment = Comment.of(member, task, parentComment, "null");
         var resp = WriteCommentToCommentResponse.builder()
             .id(1L)
             .content("null")
@@ -66,6 +71,7 @@ public class WriteCommentToCommentUseCaseTest {
             .build();
 
         given(memberServiceApi.getByIdOrThrow(anyLong())).willReturn(member);
+        given(taskServiceApi.getByIdOrThrow(anyLong())).willReturn(task);
         given(commentRepository.findById(anyLong())).willReturn(Optional.of(parentComment));
         given(commentRepository.save(any())).willReturn(newComment);
         given(commentMapper.toWriteCommentToCommentResponse(any(), anyLong(), anyLong(), any()))

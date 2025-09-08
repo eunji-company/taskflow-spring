@@ -45,9 +45,9 @@ public class ViewCommentsFromTaskUseCase {
 
     private List<Comment> getParentComments(CommentSortOption sortOption, long taskId) {
         if (sortOption == CommentSortOption.NEWEST) {
-            return commentRepository.findWithDetailsByTaskIdOrderByCreatedAtDesc(taskId);
+            return commentRepository.findWithDetailsByTaskIdAndParentCommentIsNullOrderByCreatedAtDesc(taskId);
         } else {
-            return commentRepository.findWithDetailsByTaskIdOrderByCreatedAt(taskId);
+            return commentRepository.findWithDetailsByTaskIdAndParentCommentIsNullOrderByCreatedAt(taskId);
         }
     }
 }

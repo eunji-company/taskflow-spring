@@ -3,6 +3,8 @@ package indiv.abko.taskflow.domain.comment.dto.response;
 import java.time.Instant;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.Builder;
 
 @Builder
@@ -20,6 +22,7 @@ public record ViewCommentsFromTaskResponse(
         Long taskId,
         Long userId,
         UserResp user,
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         Long parentId,
         Instant createdAt,
         Instant updatedAt) {

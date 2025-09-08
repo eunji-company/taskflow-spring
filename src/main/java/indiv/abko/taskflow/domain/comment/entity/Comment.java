@@ -44,7 +44,8 @@ public class Comment {
 	@JoinColumn(nullable = false)
 	private Member member;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(nullable = false)
 	private Task task;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -60,13 +61,13 @@ public class Comment {
 			null);
 	}
 
-	public static Comment of(Member member, Comment comment, String content) {
+	public static Comment of(Member member, Task task, Comment comment, String content) {
 		return new Comment(
 			null,
 			content,
 			null,
 			member,
-			null,
+			task,
 			comment);
 	}
 }

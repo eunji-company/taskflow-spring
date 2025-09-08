@@ -61,7 +61,8 @@ public class ViewCommentsFromTaskUseCaseTest {
             .number(0)
             .build();
 
-        given(commentRepository.findWithDetailsByTaskIdOrderByCreatedAtDesc(taskId)).willReturn(parentComments);
+        given(commentRepository.findWithDetailsByTaskIdAndParentCommentIsNullOrderByCreatedAtDesc(taskId))
+            .willReturn(parentComments);
         given(commentRepository.findWithDetailByParentCommentIsInOrderByCreatedAt(parentComments))
             .willReturn(childComments);
         given(paginatorFactory.create(any(CommentPaginationData.class))).willReturn(mockPaginator);
@@ -97,7 +98,8 @@ public class ViewCommentsFromTaskUseCaseTest {
             .number(0)
             .build();
 
-        given(commentRepository.findWithDetailsByTaskIdOrderByCreatedAt(taskId)).willReturn(parentComments);
+        given(commentRepository.findWithDetailsByTaskIdAndParentCommentIsNullOrderByCreatedAt(taskId))
+            .willReturn(parentComments);
         given(commentRepository.findWithDetailByParentCommentIsInOrderByCreatedAt(parentComments))
             .willReturn(childComments);
         given(paginatorFactory.create(any(CommentPaginationData.class))).willReturn(mockPaginator);
@@ -109,6 +111,7 @@ public class ViewCommentsFromTaskUseCaseTest {
 
         // then
         assertNotNull(result);
-        then(commentRepository).should(times(1)).findWithDetailsByTaskIdOrderByCreatedAt(taskId);
+        then(commentRepository).should(times(1))
+            .findWithDetailsByTaskIdAndParentCommentIsNullOrderByCreatedAt(taskId);
     }
 }
