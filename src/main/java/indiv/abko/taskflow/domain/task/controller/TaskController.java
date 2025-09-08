@@ -36,9 +36,10 @@ public class TaskController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public CommonResponse<CreateTaskResponse> createTask(
-			@AuthenticationPrincipal AuthMember authMember,
-			@RequestBody CreateTaskRequest request
-	) {
+		@AuthenticationPrincipal
+		AuthMember authMember,
+		@RequestBody
+		CreateTaskRequest request) {
 		CreateTaskResponse response = createTaskUseCase.execute(authMember, request);
 		return CommonResponse.success("Task가 생성되었습니다.", response);
 	}
@@ -46,12 +47,16 @@ public class TaskController {
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	public CommonResponse<PageResponse<FindAllTasksResponse>> findAllTasks(
-			@AuthenticationPrincipal AuthMember authMember,
-			@RequestParam(required = false) TaskStatus status,
-			@RequestParam(required = false) Long assigneeId,
-			@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "10") int size
-	) {
+		@AuthenticationPrincipal
+		AuthMember authMember,
+		@RequestParam(required = false)
+		TaskStatus status,
+		@RequestParam(required = false)
+		Long assigneeId,
+		@RequestParam(defaultValue = "0")
+		int page,
+		@RequestParam(defaultValue = "10")
+		int size) {
 		Page<FindAllTasksResponse> tasks = findAllTasksUseCase.execute(authMember, status, assigneeId, page, size);
 		PageResponse<FindAllTasksResponse> response = new PageResponse<>(tasks);
 		return CommonResponse.success("Task 목록을 조회했습니다.", response);
@@ -60,19 +65,21 @@ public class TaskController {
 	@GetMapping("/{taskId}")
 	@ResponseStatus(HttpStatus.OK)
 	public CommonResponse<FindTaskResponse> findTask(
-			@PathVariable Long taskId
-	) {
+		@PathVariable
+		Long taskId) {
 		FindTaskResponse response = findTaskUseCase.execute(taskId);
-        return CommonResponse.success("Task를 조회했습니다.", response);
-    }
+		return CommonResponse.success("Task를 조회했습니다.", response);
+	}
 
-	@PatchMapping("/{taskId}")
+	@PutMapping("/{taskId}")
 	@ResponseStatus(HttpStatus.OK)
 	public CommonResponse<UpdateTaskResponse> updateTask(
-		@AuthenticationPrincipal AuthMember authMember,
-		@PathVariable Long taskId,
-		@RequestBody UpdateTaskRequest request
-	) {
+		@AuthenticationPrincipal
+		AuthMember authMember,
+		@PathVariable
+		Long taskId,
+		@RequestBody
+		UpdateTaskRequest request) {
 		UpdateTaskResponse response = updateTaskUseCase.execute(taskId, request);
 		return CommonResponse.success("Task가 수정되었습니다.", response);
 	}
@@ -80,19 +87,21 @@ public class TaskController {
 	@DeleteMapping("/{taskId}")
 	@ResponseStatus(HttpStatus.OK)
 	public CommonResponse<Void> deleteTask(
-			@AuthenticationPrincipal AuthMember authMember,
-			@PathVariable Long taskId
-	) {
+		@AuthenticationPrincipal
+		AuthMember authMember,
+		@PathVariable
+		Long taskId) {
 		deleteTaskUseCase.execute(taskId);
 		return CommonResponse.success("Task가 삭제되었습니다.", null);
 	}
 
-	@PutMapping("/{taskId}/status")
+	@PatchMapping("/{taskId}/status")
 	@ResponseStatus(HttpStatus.OK)
 	public CommonResponse<UpdateStatusResponse> updateStatus(
-			@PathVariable Long taskId,
-			@RequestBody UpdateStatusRequest request
-	) {
+		@PathVariable
+		Long taskId,
+		@RequestBody
+		UpdateStatusRequest request) {
 		UpdateStatusResponse response = updateStatusUseCase.execute(taskId, request);
 		return CommonResponse.success("작업 상태가 없데이트 되었습니다.", response);
 	}
