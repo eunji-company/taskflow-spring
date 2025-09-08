@@ -23,10 +23,6 @@ public class DeleteTaskUseCase {
                 () -> new BusinessException(TaskErrorCode.TASK_NOT_FOUND)
         );
 
-        if (authMember.memberId() != task.getMember().getId()) {
-            throw new BusinessException(TaskErrorCode.TASK_FORBIDDEN);
-        }
-
         taskRepository.delete(task);
     }
 }
