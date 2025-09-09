@@ -14,13 +14,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 
 import indiv.abko.taskflow.domain.user.entity.UserRole;
 import indiv.abko.taskflow.global.jwt.JwtUtil;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
 public class AuthorizationIntegrationTest {
 
 	@Autowired

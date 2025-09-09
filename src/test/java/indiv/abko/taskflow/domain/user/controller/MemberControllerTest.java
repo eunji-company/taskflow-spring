@@ -80,13 +80,13 @@ public class MemberControllerTest extends ControllerTestSupport {
 		ReflectionTestUtils.setField(member2, "id", 2L);
 
 		var dtoList = List.of(new MembersInfoResponse(member1.getId(), member1.getEmail(), member1.getName(),
-				member1.getUserRole().name()),
+			member1.getUserRole().name()),
 			new MembersInfoResponse(member2.getId(), member2.getEmail(), member2.getName(),
 				member2.getUserRole().name()));
 		given(viewMembersInfoUseCase.execute()).willReturn(dtoList);
 
 		//when & then
-		mockMvc.perform(get("/api/users/"))
+		mockMvc.perform(get("/api/users"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.success").value(true))
 			.andExpect(jsonPath("$.message").value("요청이 성공적으로 처리되었습니다."))
